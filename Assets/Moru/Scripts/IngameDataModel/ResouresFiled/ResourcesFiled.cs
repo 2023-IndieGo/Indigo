@@ -5,7 +5,7 @@ using Moru;
 
 namespace Moru
 {
-    public class ResouresFiled
+    public class ResourcesFiled
     {
         #region Field
         private int[] reserves_Resources = new int[3];
@@ -35,6 +35,31 @@ namespace Moru
 
 
         #region Constructor
+
+        /// <summary>
+        /// 자원광산의 최초 생성자로, 자원매장량을 결정합니다.
+        /// 매개변수값이 null일 경우, 임의의 값으로 초기화됩니다.
+        /// </summary>
+        /// <param name="init_ReservesAmount"></param>
+        public ResourcesFiled(int[] init_ReservesAmount = null)
+        {
+
+            if(init_ReservesAmount == null)
+            {
+                System.Random random = new System.Random();
+                for (int i = 0; i < init_Reserves.Length; i++)
+                {
+                    init_Reserves[i] = random.Next(100, 200);
+                    reserves_Resources[i] = init_Reserves[i];
+                }
+            }
+            else
+            {
+                init_Reserves = init_ReservesAmount;
+                reserves_Resources = init_Reserves;
+            }
+
+        }
         #endregion
 
 

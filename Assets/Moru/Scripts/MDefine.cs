@@ -116,6 +116,41 @@ namespace Moru
 
             return result;
         }
+
+        /// <summary>
+        /// 컬러 디스플레이 표시의 단계의 수입니다.
+        /// </summary>
+        private const int colorThreshold_Level = 50;
+        
+        /// <summary>
+        /// 해당값 이하로의 컬러rgb값이 떨어지지 않습니다.
+        /// </summary>
+        private const float minColorValue = 0.3f;
+        /// <summary>
+        /// 해당값 이상으로의 컬러rgb값이 올라가지 않습니다.
+        /// </summary>
+        private const float maxColorValue = 0.9f;
+
+        /// <summary>
+        /// 최초 광산 생성 시 표시될 컬러값을 초기화합니다.
+        /// </summary>
+        /// <param name="rgbValue"></param>
+        /// <returns></returns>
+        public static float[] ColorRateInitializer(int[] rgbValue)
+        {
+            if(rgbValue == null)
+            {
+                Debug.Log("매개변수가 null입니다. 메서드 종료");
+                return new float[3] { 0.5f, 0.5f, 0.5f };
+            }
+            float[] result = new float[3];
+            int cur_Max = rgbValue[0];
+            for (int i = 0; i < rgbValue.Length; i++)
+            {
+
+            }
+            return result;
+        }
     }
 
     public class MergeUtillity
@@ -132,17 +167,28 @@ namespace Moru
             string result = $"\n{arr} : Array Result-----\n";
             for (int i = 0; i < arr.Length; i++)
             {
+                if (arr[i] == null) continue;
                 result += arr[i].ToString();
                 result += "\n";
             }
             result += "----Array End----\n";
             return result;
         }
-        public static string ListToString<T>(T[] arr)
+        public static string ListToString<T>(List<T> arr)
         {
-            return ";";
+            string result = $"\n{arr} : List Result-----\n";
+            for (int i = 0; i < arr.Count; i++)
+            {
+                result += arr[i].ToString();
+                result += "\n";
+            }
+            result += "----List End----\n";
+            return result;
         }
     }
 
-    
+    public class MHexagonUtility
+    {
+
+    }
 }

@@ -265,6 +265,21 @@ namespace Moru
 
         }
 
+        /// <summary>
+        /// InputDir방향에 광산이 있을 경우 자원을 가지고 옵니다.
+        /// </summary>
+        private void Mining()
+        {
+
+        }
+
+        /// <summary>
+        /// InputDir방향의 타일으로부터 자원을 가지고 옵니다.
+        /// </summary>
+        private void GetResourceFromInputDirTile()
+        {
+
+        }
 
         #endregion Private/Protected Methods
     }
