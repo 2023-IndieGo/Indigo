@@ -6,6 +6,21 @@ using Moru;
 namespace Moru
 {
 
+    public class TestMapViewer : MonoBehaviour
+    {
+        public TestTile myTile;
+        private void OnEnable()
+        {
+            
+        }
+
+        public void Init(TestTile _tile)
+        {
+            myTile = _tile;
+        }
+    }
+
+    [System.Serializable]
     public class TestMap
     {
         public static int x;
@@ -33,6 +48,7 @@ namespace Moru
         }
     }
 
+    [System.Serializable]
     public class TestTile
     {
         private Stack<Unit> units;
@@ -48,6 +64,7 @@ namespace Moru
             adressY = y;
         }
     }
+
 
     public class TestTileUtility
     {
