@@ -57,7 +57,6 @@ public class UnitViewer : MonoBehaviour
     private void Start()
     {
         ChangeTest();
-        Unit units;
     }
     public void ChangeTest()
     {

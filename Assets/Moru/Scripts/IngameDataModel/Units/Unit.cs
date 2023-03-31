@@ -42,7 +42,7 @@ namespace Moru
         /// RGB를 eRGB형식으로 받아옵니다.
         /// </summary>
         public eRGB unitColor
-        { get { return ColorUtility.Generate_IntArr_to_eRGB(RGBValue); } }
+        { get { return MColorUtility.Generate_BoolArr_to_eRGB(RGBValue); } }
 
         //....Direction....//
 
@@ -96,7 +96,7 @@ namespace Moru
             //무작위 컬러? (컬러가 유닛마다 정해져있을수도) (일단 무작위 컬러로)
             int randomColor = random.Next(0, 3);
             eRGB randomResult = (eRGB)randomColor;
-            rgbValue = ColorUtility.Generate_eRGB_to_IntArr(randomResult);
+            rgbValue = MColorUtility.Generate_eRGB_to_BoolArr(randomResult);
 
             //무작위 방향 (일단 한 방향만)
             int RandomDir = random.Next(0, 6);
@@ -113,7 +113,7 @@ namespace Moru
         /// <param name="_input_Dir"></param>
         public Unit(eRGB _unitColor, bool[] _input_Dir) : base() //실행순서 : base()부터
         {
-            this.rgbValue = ColorUtility.Generate_eRGB_to_IntArr(_unitColor);
+            this.rgbValue = MColorUtility.Generate_eRGB_to_BoolArr(_unitColor);
             this.input_Dir = _input_Dir;
             Init();
         }
@@ -159,7 +159,7 @@ namespace Moru
         public void SetColor(eRGB color)
         {
             bool[] origin = rgbValue;
-            bool[] recent = ColorUtility.Generate_eRGB_to_IntArr(color);
+            bool[] recent = MColorUtility.Generate_eRGB_to_BoolArr(color);
             rgbValue = recent;
 
             //메서드 실행
@@ -179,7 +179,7 @@ namespace Moru
             //현재 컬러
             bool[] currentColor = rgbValue;
             //더하는 컬러값
-            bool[] colorRGBValue = ColorUtility.Generate_eRGB_to_IntArr(color);
+            bool[] colorRGBValue = MColorUtility.Generate_eRGB_to_BoolArr(color);
             //최종 컬러
             bool[] inputColor = new bool[3];
 
@@ -188,7 +188,7 @@ namespace Moru
                 inputColor[i] = (currentColor[i] || colorRGBValue[i]) ? true : false;
             }
 
-            eRGB result = ColorUtility.Generate_IntArr_to_eRGB(inputColor);
+            eRGB result = MColorUtility.Generate_BoolArr_to_eRGB(inputColor);
             if (result != unitColor)
             {
                 SetColor(result);
@@ -204,7 +204,7 @@ namespace Moru
             //현재 컬러
             bool[] currentColor = rgbValue;
             //제거하는 컬러값
-            bool[] colorRGBValue = ColorUtility.Generate_eRGB_to_IntArr(color);
+            bool[] colorRGBValue = MColorUtility.Generate_eRGB_to_BoolArr(color);
             //최종 컬러
             bool[] inputColor = new bool[3];
 
@@ -221,7 +221,7 @@ namespace Moru
                 }
             }
 
-            eRGB result = ColorUtility.Generate_IntArr_to_eRGB(inputColor);
+            eRGB result = MColorUtility.Generate_BoolArr_to_eRGB(inputColor);
             if (result != unitColor)
             {
                 SetColor(result);

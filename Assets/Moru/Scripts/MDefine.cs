@@ -2,6 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+#region Field
+#endregion
+
+
+#region Properties
+#endregion
+
+
+#region Events
+#endregion
+
+
+#region Constructor
+#endregion
+
+
+#region Public Methods
+#endregion
+
+
+#region Private/Protected Methods
+#endregion
+
 namespace Moru
 {
     public enum eRGB
@@ -20,7 +44,7 @@ namespace Moru
     public delegate void OnValueChange_Params<T>(T origin, T input);
 
 
-    public class ColorUtility
+    public class MColorUtility
     {
         private static Dictionary<eRGB, bool[]> dic_eRGB_To_bool;
 
@@ -43,7 +67,7 @@ namespace Moru
         /// eRGB의 값을 bool[]형으로 전환한 데이터값을 받아옵니다.
         /// </summary>
         /// <param name="value"></param>
-        public static bool[] Generate_eRGB_to_IntArr(eRGB value)
+        public static bool[] Generate_eRGB_to_BoolArr(eRGB value)
         {
             if (dic_eRGB_To_bool == null)
             { Init(); }
@@ -65,7 +89,7 @@ namespace Moru
         /// bool[]의 값을 eRGB로 전환한 데이터값을 받아옵니다.
         /// </summary>
         /// <param name="value"></param>
-        public static eRGB Generate_IntArr_to_eRGB(bool[] value)
+        public static eRGB Generate_BoolArr_to_eRGB(bool[] value)
         {
             if (dic_eRGB_To_bool == null)
             { Init(); }
@@ -119,4 +143,6 @@ namespace Moru
             return ";";
         }
     }
+
+    
 }
