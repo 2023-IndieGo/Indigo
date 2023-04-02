@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Moru;
+using Sirenix.OdinInspector;
 
 namespace Moru
 {
@@ -9,21 +10,25 @@ namespace Moru
     public class ResourcesFiled
     {
         #region Field
-        [SerializeField]
+        [SerializeField, LabelText("자원 잔여랑")]
         private int[] reserves_Resources = new int[3];
         /// <summary>
         /// 현재 남아있는 자원잔량을 의미합니다.
         /// </summary>
         public int[] Reserves_Resources => reserves_Resources;
 
+        [SerializeField, LabelText("초기 자원 잔여랑"), ReadOnly]
         private int[] init_Reserves = new int[3];
         /// <summary>
         /// 최초 마인의 자원량입니다.
         /// </summary>
         private int[] Init_Reserves => init_Reserves;
 
+        [SerializeField, LabelText("현재 위치한 타일데이터")] 
         TestTile cur_Tile;
         public TestTile Cur_Tile => cur_Tile;
+
+        [SerializeField, LabelText("자원광산 뷰어 컴포넌트"), ReadOnly]
         ResourcesFieldViewer ResFieldViewer;
         #endregion
 

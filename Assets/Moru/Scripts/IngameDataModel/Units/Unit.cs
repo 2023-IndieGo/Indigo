@@ -30,21 +30,23 @@ namespace Moru
 
         #region Value Field
         //....Color....//
-        [ShowInInspector]
+        [ShowInInspector, LabelText("RGB 포함 여부 배열"), TitleGroup("중요 데이터값")]
         protected bool[] rgbValue = new bool[3] { false, false, false };
+
         /// <summary>
         /// 각 RGB값의 밸류배열입니다. 0 : R // G : 1 // B : 2
         /// </summary>
         public bool[] RGBValue => rgbValue;
+
         /// <summary>
         /// RGB를 eRGB형식으로 받아옵니다.
         /// </summary>
-        [ShowInInspector]
+        [ShowInInspector, LabelText("유닛컬러")]
         public eRGB unitColor
         { get { return MColorUtility.Generate_BoolArr_to_eRGB(RGBValue); } }
 
         //....Direction....//
-        [SerializeField]
+        [SerializeField, LabelText("인풋방향")]
         protected bool[] input_Dir = new bool[6];
         /// <summary>
         /// 유닛의 인풋라인을 결정해주는 boolean입니다. 0번(1시방향)부터 시계방향으로의 면이 인풋방향입니다.
@@ -73,11 +75,12 @@ namespace Moru
         /// 유닛이 현재 위치한 타일
         /// </summary>
         /// 
-        [SerializeField]
+        [SerializeField, TitleGroup("참조값"), LabelText("현재 자신의 타일")]
         protected TestTile cur_Tile;
         public TestTile Cur_Tile => cur_Tile;
 
-        [SerializeField] protected Viewer<Unit> myUnitViewer;
+        [SerializeField, LabelText("뷰어")] 
+        protected Viewer<Unit> myUnitViewer;
 
         #endregion
         #endregion
