@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ParticleSystemJobs;
 using Moru;
+using Sirenix.OdinInspector;
 
 public class ResourcesFieldViewer : Viewer<ResourcesFiled>
 {
@@ -10,12 +11,12 @@ public class ResourcesFieldViewer : Viewer<ResourcesFiled>
     //유닛이 자원을 캐면 모델업데이트 델리게이트 메서드 구현
 
     #region Field
-    [SerializeField]
+    [SerializeField, LabelText("광산 데이터"), TitleGroup("데이터")]
     private ResourcesFiled fieldData;
     public ResourcesFiled FieldData => fieldData;
 
-    [SerializeField] private MeshRenderer remind_Obj;
-    [SerializeField] private ParticleSystem particle;
+    [SerializeField, TitleGroup("꾸미기"), LabelText("잔여량 표시 컬러")] private MeshRenderer remind_Obj;
+    [SerializeField, LabelText("파티클")] private ParticleSystem particle;
 
     #endregion
 

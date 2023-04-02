@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Moru;
+using Sirenix.OdinInspector;
 
 public class UnitViewer : Viewer<Unit>
 {
     #region Field
-    [SerializeField]
+    [SerializeField, LabelText("¿Ø¥÷µ•¿Ã≈Õ")]
     private Unit unitData;
     public Unit UnitData => unitData;
 
-    [SerializeField] private GameObject direction_Obj;
+    [SerializeField, LabelText("¿Œ«≤πÊ«‚ ∫‰æÓ"), TitleGroup("∫‰æÓ ø¿∫Í¡ß∆Æ")] 
+    private GameObject direction_Obj;
 
     #endregion
 

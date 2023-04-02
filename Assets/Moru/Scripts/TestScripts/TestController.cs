@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Moru;
+using Sirenix.OdinInspector;
+
 
 public class TestController : MonoBehaviour
 {
+
     public TestMapViewer tileViewer;
     private TestTile lastTile;
     public TestTile tile;
