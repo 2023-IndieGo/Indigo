@@ -9,7 +9,7 @@ namespace Moru
     {
 
 
-        public Queen(TestTile targetTile) : base()
+        public Queen(Tile targetTile) : base()
         {
             rgbValue = new bool[3] { true, true, true};
             //unitColor = eRGB.White;
@@ -18,17 +18,17 @@ namespace Moru
             cur_Tile = targetTile;
 
             //Test성격 강함
-            GameObject obj = MonoBehaviour.Instantiate(TsetMono.instance.testUnitPrefap);
-            if (obj.TryGetComponent<UnitViewer>(out var comp))
-            {
-                myUnitViewer = comp;
-                comp.Init(this);
-            }
-            else
-            {
-                myUnitViewer = obj.AddComponent<UnitViewer>();
-                myUnitViewer.Init(this);
-            }
+            //GameObject obj = MonoBehaviour.Instantiate(TsetMono.instance.testUnitPrefap);
+            //if (obj.TryGetComponent<UnitViewer>(out var comp))
+            //{
+            //    myUnitViewer = comp;
+            //    comp.Init(this);
+            //}
+            //else
+            //{
+            //    myUnitViewer = obj.AddComponent<UnitViewer>();
+            //    myUnitViewer.Init(this);
+            //}
 
             Init();
         }

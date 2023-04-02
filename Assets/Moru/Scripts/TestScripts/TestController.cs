@@ -9,8 +9,8 @@ public class TestController : MonoBehaviour
 {
 
     public TestMapViewer tileViewer;
-    private TestTile lastTile;
-    public TestTile tile;
+    private Tile lastTile;
+    public Tile tile;
     public Unit SeletedUnit;
 
     void Update()

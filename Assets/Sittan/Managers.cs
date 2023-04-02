@@ -11,10 +11,13 @@ public class Managers : MonoBehaviour
     #region Manager
 
     [SerializeField] TestManagerA _testManagerA = new TestManagerA();
+    [SerializeField] MapManager map = new MapManager();
+    [SerializeField] ResourceManager resource = new ResourceManager();
 
 
     public static TestManagerA TestA { get { return Instance._testManagerA; } }
-
+    public static MapManager Map { get { return Instance.map; } }
+    public static ResourceManager Resource { get { return Instance.resource; } }
     #endregion
 
 
@@ -37,6 +40,8 @@ public class Managers : MonoBehaviour
 
 
             TestA.Init();
+            map.Init(10,10);
+            resource.Init();
         }
     }
 

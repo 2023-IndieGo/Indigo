@@ -306,9 +306,9 @@ namespace Moru
         /// </summary>
         /// <param name="selectedTile"></param>
         /// <returns></returns>
-        public static TestTile[] GetNeighborTile(TestTile selectedTile)
+        public static Tile[] GetNeighborTile(Tile selectedTile)
         {
-            TestTile[] result = new TestTile[6];
+            Tile[] result = new Tile[6];
             int x = selectedTile.adressX;
             int y = selectedTile.adressY;
             for (int i = 0; i < result.Length; i++)
@@ -321,23 +321,23 @@ namespace Moru
                 //위에께 0보다 클경우
                 if (y - 1 >= 0)
                 {
-                    result[0] = TestMap.GetTile(x, y - 1);
+                    result[0] = Managers.Map.GetTile(x, y - 1);
 
                 }
                 //아래께 최대값보다 작을경우
-                if (y + 1 < TestMap.y)
+                if (y + 1 < Managers.Map.y)
                 {
 
-                    result[3] = TestMap.GetTile(x, y + 1);
+                    result[3] = Managers.Map.GetTile(x, y + 1);
                     if (x - 1 >= 0)
                     {
-                        result[5] = TestMap.GetTile(x - 1, y);
-                        result[4] = TestMap.GetTile(x - 1, y + 1);
+                        result[5] = Managers.Map.GetTile(x - 1, y);
+                        result[4] = Managers.Map.GetTile(x - 1, y + 1);
                     }
-                    if (x + 1 < TestMap.x)
+                    if (x + 1 < Managers.Map.x)
                     {
-                        result[1] = TestMap.GetTile(x + 1, y);
-                        result[2] = TestMap.GetTile(x + 1, y + 1);
+                        result[1] = Managers.Map.GetTile(x + 1, y);
+                        result[2] = Managers.Map.GetTile(x + 1, y + 1);
                     }
                 }
             }
@@ -346,22 +346,22 @@ namespace Moru
             {
                 if (y - 1 >= 0)
                 {
-                    result[0] = TestMap.GetTile(x, y - 1);
+                    result[0] = Managers.Map.GetTile(x, y - 1);
                     if (x - 1 >= 0)
                     {
-                        result[5] = TestMap.GetTile(x - 1, y - 1);
-                        result[4] = TestMap.GetTile(x - 1, y);
+                        result[5] = Managers.Map.GetTile(x - 1, y - 1);
+                        result[4] = Managers.Map.GetTile(x - 1, y);
                     }
-                    if (x + 1 < TestMap.x)
+                    if (x + 1 < Managers.Map.x)
                     {
-                        result[1] = TestMap.GetTile(x + 1, y - 1);
-                        result[2] = TestMap.GetTile(x + 1, y);
+                        result[1] = Managers.Map.GetTile(x + 1, y - 1);
+                        result[2] = Managers.Map.GetTile(x + 1, y);
                     }
 
                 }
-                if (y + 1 < TestMap.y)
+                if (y + 1 < Managers.Map.y)
                 {
-                    result[3] = TestMap.GetTile(x, y + 1);
+                    result[3] = Managers.Map.GetTile(x, y + 1);
                 }
             }
 
@@ -375,7 +375,7 @@ namespace Moru
         /// <param name="myTile"></param>
         /// <param name="targetTile"></param>
         /// <returns></returns>
-        public static bool IsNeighborTileContainMe_throughUnit(Unit cur_Unit, TestTile targetTile)
+        public static bool IsNeighborTileContainMe_throughUnit(Unit cur_Unit, Tile targetTile)
         {
             if (targetTile == null) return false;
             if (targetTile.Units.Count == 0) return false;
@@ -385,7 +385,7 @@ namespace Moru
             for (int i = 0; i < units.Length; i++)
             {
                 bool[] unitDirInfo = units[i].Input_Dir;
-                TestTile[] aroundTile = GetNeighborTile(targetTile);
+                Tile[] aroundTile = GetNeighborTile(targetTile);
 
                 for (int j = 0; j < unitDirInfo.Length; j++)
                 {
@@ -412,9 +412,9 @@ namespace Moru
         /// </summary>
         /// <param name="inputDir"></param>
         /// <returns></returns>
-        public static TestTile[] GetTile_throughInputDir(TestTile from, bool[] input_Data)
+        public static Tile[] GetTile_throughInputDir(Tile from, bool[] input_Data)
         {
-            List<TestTile> tiles = new List<TestTile>();
+            List<Tile> tiles = new List<Tile>();
             var neighbors = GetNeighborTile(from);
             for (int i = 0; i < input_Data.Length; i++)
             {

@@ -9,48 +9,48 @@ namespace Moru
 
     public class TestMapViewer : MonoBehaviour
     {
-        public TestTile myTile;
+        public Tile myTile;
         private void OnEnable()
         {
             
         }
 
-        public void Init(TestTile _tile)
+        public void Init(Tile _tile)
         {
             myTile = _tile;
             myTile.curPosition = transform.position;
         }
     }
 
-    [System.Serializable]
-    public class TestMap
-    {
-        public static int x;
-        public static int y;
-        private static TestTile[,] grids;
+    //[System.Serializable]
+    //public class Mapnagersmap
+    //{
+    //    public static int x;
+    //    public static int y;
+    //    private static Tile[,] grids;
         
-        public TestMap(int x, int y)
-        {
-            TestMap.x = x;
-            TestMap.y = y;
-            grids = new TestTile[x, y];
-            for (int _x = 0; _x < TestMap.x; _x++)
-            {
-                for (int _y = 0; _y < TestMap.y; _y++)
-                {
-                    grids[_x, _y] = new TestTile(_x, _y);
-                }
-            }
-        }
+    //    public Mapnagersmap(int x, int y)
+    //    {
+    //        Mapnagersmap.x = x;
+    //        Mapnagersmap.y = y;
+    //        grids = new Tile[x, y];
+    //        for (int _x = 0; _x < Mapnagersmap.x; _x++)
+    //        {
+    //            for (int _y = 0; _y < Mapnagersmap.y; _y++)
+    //            {
+    //                grids[_x, _y] = new Tile(_x, _y);
+    //            }
+    //        }
+    //    }
 
-        public static TestTile GetTile(int x, int y)
-        {
-            return grids[x, y];
-        }
-    }
+    //    public static Tile GetTile(int x, int y)
+    //    {
+    //        return grids[x, y];
+    //    }
+    //}
 
     [System.Serializable]
-    public class TestTile
+    public class Tile
     {
         [ShowInInspector, TitleGroup("Field Condition")]
         private Stack<Unit> units = new Stack<Unit>();
@@ -71,7 +71,7 @@ namespace Moru
 
         public Vector3 curPosition;
 
-        public TestTile(int x, int y)
+        public Tile(int x, int y)
         {
             adressX = x;
             adressY = y;
