@@ -23,7 +23,7 @@ namespace Moru
 
 
         #region Constructor
-        public Res(eRGB colorType, TestTile targetTile)
+        public Res(eRGB colorType, Tile targetTile)
         {
             this.colorType = colorType;
         }

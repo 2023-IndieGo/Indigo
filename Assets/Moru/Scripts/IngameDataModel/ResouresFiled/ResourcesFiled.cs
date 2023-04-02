@@ -25,8 +25,8 @@ namespace Moru
         private int[] Init_Reserves => init_Reserves;
 
         [SerializeField, LabelText("현재 위치한 타일데이터")] 
-        TestTile cur_Tile;
-        public TestTile Cur_Tile => cur_Tile;
+        Tile cur_Tile;
+        public Tile Cur_Tile => cur_Tile;
 
         [SerializeField, LabelText("자원광산 뷰어 컴포넌트"), ReadOnly]
         ResourcesFieldViewer ResFieldViewer;
@@ -52,7 +52,7 @@ namespace Moru
         /// 매개변수값이 null일 경우, 임의의 값으로 초기화됩니다.
         /// </summary>
         /// <param name="init_ReservesAmount"></param>
-        public ResourcesFiled(TestTile targetTile, int[] init_ReservesAmount = null)
+        public ResourcesFiled(Tile targetTile, int[] init_ReservesAmount = null)
         {
 
             if (init_ReservesAmount == null)
@@ -71,17 +71,17 @@ namespace Moru
             }
             cur_Tile = targetTile;
 
-            GameObject obj = MonoBehaviour.Instantiate(TsetMono.instance.testFieldPrefap);
-            if (obj.TryGetComponent<ResourcesFieldViewer>(out var comp))
-            {
-                ResFieldViewer = comp;
-                comp.Init(this);
-            }
-            else
-            {
-                ResFieldViewer = obj.AddComponent<ResourcesFieldViewer>();
-                ResFieldViewer.Init(this);
-            }
+            //GameObject obj = MonoBehaviour.Instantiate(TsetMono.instance.testFieldPrefap);
+            //if (obj.TryGetComponent<ResourcesFieldViewer>(out var comp))
+            //{
+            //    ResFieldViewer = comp;
+            //    comp.Init(this);
+            //}
+            //else
+            //{
+            //    ResFieldViewer = obj.AddComponent<ResourcesFieldViewer>();
+            //    ResFieldViewer.Init(this);
+            //}
         }
         #endregion
 

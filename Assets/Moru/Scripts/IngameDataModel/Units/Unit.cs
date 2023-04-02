@@ -76,8 +76,8 @@ namespace Moru
         /// </summary>
         /// 
         [SerializeField, TitleGroup("참조값"), LabelText("현재 자신의 타일")]
-        protected TestTile cur_Tile;
-        public TestTile Cur_Tile => cur_Tile;
+        protected Tile cur_Tile;
+        public Tile Cur_Tile => cur_Tile;
 
         [SerializeField, LabelText("뷰어")] 
         protected Viewer<Unit> myUnitViewer;
@@ -107,7 +107,7 @@ namespace Moru
         /// <summary>
         /// 랜덤한 유닛데이터를 생성하고자 할 경우의 생성자입니다.
         /// </summary>
-        public Unit(TestTile targetTile) : base()
+        public Unit(Tile targetTile) : base()
         {
             System.Random random = new System.Random();
             //무작위 유닛데이터를 DataBase로부터 받아옴
@@ -124,19 +124,19 @@ namespace Moru
             }
 
             cur_Tile = targetTile;
-            TsetMono.onTurnEnd += OnTurnEnd;
-            //Test성격 강함
-            GameObject obj = MonoBehaviour.Instantiate(TsetMono.instance.testUnitPrefap);
-            if (obj.TryGetComponent<UnitViewer>(out var comp))
-            {
-                myUnitViewer = comp;
-                comp.Init(this);
-            }
-            else
-            {
-                myUnitViewer = obj.AddComponent<UnitViewer>();
-                myUnitViewer.Init(this);
-            }
+            //TsetMono.onTurnEnd += OnTurnEnd;
+            ////Test성격 강함
+            //GameObject obj = MonoBehaviour.Instantiate(TsetMono.instance.testUnitPrefap);
+            //if (obj.TryGetComponent<UnitViewer>(out var comp))
+            //{
+            //    myUnitViewer = comp;
+            //    comp.Init(this);
+            //}
+            //else
+            //{
+            //    myUnitViewer = obj.AddComponent<UnitViewer>();
+            //    myUnitViewer.Init(this);
+            //}
 
             Init();
         }
@@ -146,7 +146,7 @@ namespace Moru
         /// </summary>
         /// <param name="_unitColor"></param>
         /// <param name="_input_Dir"></param>
-        public Unit(eRGB _unitColor, bool[] _input_Dir, TestTile targetTile)
+        public Unit(eRGB _unitColor, bool[] _input_Dir, Tile targetTile)
         {
             this.rgbValue = MColorUtility.Generate_eRGB_to_BoolArr(_unitColor);
             this.input_Dir = _input_Dir;
@@ -180,7 +180,7 @@ namespace Moru
         /// <summary>
         /// 해당 타일로 이동시킵니다.
         /// </summary>
-        public void OnMove(TestTile target)
+        public void OnMove(Tile target)
         {
             cur_Tile = target;
             this.Init();
@@ -191,7 +191,7 @@ namespace Moru
         /// 유닛을 해당 타일로 새로 배치합니다.
         /// </summary>
         /// <param name="target"></param>
-        public void OnLocate(TestTile target)
+        public void OnLocate(Tile target)
         {
 
         }
@@ -320,7 +320,7 @@ namespace Moru
 
             //자신의 주변에 자신을 향한 인풋을 가진 유닛이 있는지 체크
             //주변타일 검색
-            TestTile[] aroundTiles = MHexagonUtility.GetNeighborTile(cur_Tile);
+            Tile[] aroundTiles = MHexagonUtility.GetNeighborTile(cur_Tile);
             for (int i = 0; i < aroundTiles.Length; i++)
             {
                 //주변타일 중 누군가가 자신을 포함하고 있으면?
@@ -343,7 +343,7 @@ namespace Moru
         /// </summary>
         private void recursioningMining()
         {
-            TestTile[] InputDir_Tiles = MHexagonUtility.GetTile_throughInputDir(cur_Tile, input_Dir);
+            Tile[] InputDir_Tiles = MHexagonUtility.GetTile_throughInputDir(cur_Tile, input_Dir);
             for (int i = 0; i < InputDir_Tiles.Length; i++)
             {
                 if (InputDir_Tiles[i].MiningField != null && InputDir_Tiles[i].Units.Count == 0)
