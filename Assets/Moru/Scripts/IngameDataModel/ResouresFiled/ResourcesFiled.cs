@@ -5,9 +5,11 @@ using Moru;
 
 namespace Moru
 {
+    [System.Serializable]
     public class ResourcesFiled
     {
         #region Field
+        [SerializeField]
         private int[] reserves_Resources = new int[3];
         /// <summary>
         /// 현재 남아있는 자원잔량을 의미합니다.
@@ -19,6 +21,10 @@ namespace Moru
         /// 최초 마인의 자원량입니다.
         /// </summary>
         private int[] Init_Reserves => init_Reserves;
+
+        TestTile cur_Tile;
+        public TestTile Cur_Tile => cur_Tile;
+        ResourcesFieldViewer ResFieldViewer;
         #endregion
 
 
@@ -41,10 +47,10 @@ namespace Moru
         /// 매개변수값이 null일 경우, 임의의 값으로 초기화됩니다.
         /// </summary>
         /// <param name="init_ReservesAmount"></param>
-        public ResourcesFiled(int[] init_ReservesAmount = null)
+        public ResourcesFiled(TestTile targetTile, int[] init_ReservesAmount = null)
         {
 
-            if(init_ReservesAmount == null)
+            if (init_ReservesAmount == null)
             {
                 System.Random random = new System.Random();
                 for (int i = 0; i < init_Reserves.Length; i++)
@@ -58,7 +64,19 @@ namespace Moru
                 init_Reserves = init_ReservesAmount;
                 reserves_Resources = init_Reserves;
             }
+            cur_Tile = targetTile;
 
+            GameObject obj = MonoBehaviour.Instantiate(TsetMono.instance.testFieldPrefap);
+            if (obj.TryGetComponent<ResourcesFieldViewer>(out var comp))
+            {
+                ResFieldViewer = comp;
+                comp.Init(this);
+            }
+            else
+            {
+                ResFieldViewer = obj.AddComponent<ResourcesFieldViewer>();
+                ResFieldViewer.Init(this);
+            }
         }
         #endregion
 
@@ -68,14 +86,15 @@ namespace Moru
         /// 매개변수값의 컬러를 채취하는 것을 시도 후, 시도결과를 반환합니다. out resources는 null이 될 수 있습니다.
         /// </summary>
         /// <param name="targetResources"></param>
-        public bool TryMining(eRGB targetResources, out Res resources)
+        public bool TryMining(Unit who, eRGB targetResources, out Res resources)
         {
-            if(targetResources == eRGB.Black)
+            if (targetResources == eRGB.Black)
             {
                 resources = null;
                 Debug.Log($"잘못된 자원캐기 입력값 매개변수 : {targetResources}. 메서드 종료");
                 return false;
             }
+            //현재 자원량
             int[] current_Reserves = reserves_Resources;
             //채취 결과를 저장할 boolean 배열
             bool[] colorResult = new bool[3];
@@ -85,9 +104,9 @@ namespace Moru
             //내부로직
             for (int i = 0; i < targetRGB_Value.Length; i++)
             {
-                if(targetRGB_Value[i])
+                if (targetRGB_Value[i])
                 {
-                    if(reserves_Resources[i] >0)
+                    if (reserves_Resources[i] > 0)
                     {
                         reserves_Resources[i]--;
                         colorResult[i] = true;
@@ -103,17 +122,18 @@ namespace Moru
             eRGB enumTypeRGB_Result = MColorUtility.Generate_BoolArr_to_eRGB(colorResult);
 
             //resources가 black이면 (자원을 아예 채취를 못했으면)
-            if(enumTypeRGB_Result == eRGB.Black)
+            if (enumTypeRGB_Result == eRGB.Black)
             {
                 resources = null;
-                Debug.Log($"자원을 캐는데에 실패하였음");
+                Debug.Log($"{who}가 {targetResources}자원캐기 시도, 결과값 : {enumTypeRGB_Result} ::자원을 캐는데에 실패하였음");
                 return false;
             }
 
             //생성 후 out으로 넘겨주고 캔 유닛이 알아서 처리하도록 설정,
-            resources = new Res(enumTypeRGB_Result);
+            resources = new Res(enumTypeRGB_Result, who.Cur_Tile);
 
             onReservesChange?.Invoke(current_Reserves, reserves_Resources);
+            Debug.Log($"{who}가 {targetResources}자원캐기 시도, 결과값 : {enumTypeRGB_Result} ::자원을 캐는데에 성공하였음");
             return true;
         }
 
@@ -122,18 +142,18 @@ namespace Moru
         /// 특정컬러를 원하는 만큼 캘 수 있습니다. out resources는 0이 될 수 있습니다.
         /// </summary>
         /// <param name="targetResources"></param>
-        public bool TryMining(eRGB targetResources, int amount, out Res[] resources)
+        public bool TryMining(Unit who, eRGB targetResources, int amount, out Res[] resources)
         {
             List<Res> _res = new List<Res>();
             for (int i = 0; i < amount; i++)
             {
-                if(TryMining(targetResources, out var result))
+                if (TryMining(who, targetResources, out var result))
                 {
                     _res.Add(result);
                 }
             }
             resources = _res.ToArray();
-            if(resources.Length == 0)
+            if (resources.Length == 0)
             {
                 return false;
             }
@@ -147,7 +167,7 @@ namespace Moru
         /// 한번에 원하는 만큼 캘 수 있습니다.
         /// </summary>
         /// <param name="targetResources"></param>
-        public bool TryMining(int[] targetResources, out Res[] resources)
+        public bool TryMining(Unit who, int[] targetResources, out Res[] resources)
         {
 
             resources = new Res[0];
@@ -172,7 +192,7 @@ namespace Moru
         public void SetReserves_Amount(int[] amount = null)
         {
             int[] current_Reserves = reserves_Resources;
-            if(amount == null)
+            if (amount == null)
             {
                 reserves_Resources = init_Reserves;
             }

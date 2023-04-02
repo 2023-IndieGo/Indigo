@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Moru;
+using Sirenix.OdinInspector;
 
 namespace Moru
 {
@@ -17,6 +18,7 @@ namespace Moru
         public void Init(TestTile _tile)
         {
             myTile = _tile;
+            myTile.curPosition = transform.position;
         }
     }
 
@@ -26,6 +28,7 @@ namespace Moru
         public static int x;
         public static int y;
         private static TestTile[,] grids;
+        
         public TestMap(int x, int y)
         {
             TestMap.x = x;
@@ -38,8 +41,6 @@ namespace Moru
                     grids[_x, _y] = new TestTile(_x, _y);
                 }
             }
-
-            
         }
 
         public static TestTile GetTile(int x, int y)
@@ -51,85 +52,91 @@ namespace Moru
     [System.Serializable]
     public class TestTile
     {
-        private Stack<Unit> units;
+        [ShowInInspector, TitleGroup("Field Condition")]
+        private Stack<Unit> units = new Stack<Unit>();
+        public Stack<Unit> Units => units;
+
+        [ShowInInspector]
         private ResourcesFiled miningField;
-        private Stack<Res> resources;
+        public ResourcesFiled MiningField { get => miningField; set => miningField = value; }
+
+        [ShowInInspector]
+        private Dictionary<eRGB, Stack<Res>> resList = new Dictionary<eRGB, Stack<Res>>();
+        public Dictionary<eRGB, Stack<Res>> ResList => resList;
+
+        [TitleGroup("Adress")]
         public int adressX;
         
         public int adressY;
-        
+
+        public Vector3 curPosition;
+
         public TestTile(int x, int y)
         {
             adressX = x;
             adressY = y;
-        }
-    }
-
-
-    public class TestTileUtility
-    {
-        /// <summary>
-        /// 타일의 주변타일 6개를 받아옵니다.
-        /// </summary>
-        /// <param name="selectedTile"></param>
-        /// <returns></returns>
-        public static TestTile[] GetNeighborTile(TestTile selectedTile)
-        {
-            TestTile[] result = new TestTile[6];
-            int x = selectedTile.adressX;
-            int y = selectedTile.adressY;
-            for (int i = 0; i < result.Length; i++)
+            //메모리 초기화
+            if(resList == null)
             {
-                result[i] = null;
+                resList = new Dictionary<eRGB, Stack<Res>>();
             }
-            if(selectedTile.adressY %2 != 1)
+            for (int i = 0; i < (int)eRGB.Black; i++)
             {
+                resList.Add((eRGB)i, new Stack<Res> ());
+            }
+            
+        }
 
-                if(y - 1 >= 0)
+        /// <summary>
+        /// 해당타일로부터 매개변수값의 타일을 받아옵니다.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public Res PopRes(eRGB type)
+        {
+            if (resList.ContainsKey(type))
+            {
+                var stackList = resList[type];
+                if (stackList.TryPop(out Res result))
                 {
-                    result[0] = TestMap.GetTile(x, y - 1);
-                    
+                    return result;
                 }
-                if(y + 1 <TestMap.y)
+                else
                 {
-                    result[3] = TestMap.GetTile(x, y + 1);
-                    if (x - 1 >= 0)
-                    {
-                        result[5] = TestMap.GetTile(x - 1, y);
-                        result[4] = TestMap.GetTile(x - 1, y+1);
-                    }
-                    if (x + 1 < TestMap.x)
-                    {
-                        result[1] = TestMap.GetTile(x + 1, y);
-                        result[2] = TestMap.GetTile(x + 1, y + 1);
-                    }
+                    return null;
                 }
+            }
+            else return null;
+        }
+
+        /// <summary>
+        /// 해당타일의 자원현황에 자원을 쌓습니다.
+        /// </summary>
+        /// <param name="res"></param>
+        public void AddRes(Res res)
+        {
+            if (resList.ContainsKey(res.colorType))
+            {
+                var stackList = resList[res.colorType];
+                stackList.Push(res);
+            }
+        }
+
+        public Unit PopUnit()
+        {
+            if(units.TryPop(out var result))
+            {
+                return result;
             }
             else
             {
-                if (y - 1 >= 0)
-                {
-                    result[0] = TestMap.GetTile(x, y - 1);
-                    if (x - 1 >= 0)
-                    {
-                        result[5] = TestMap.GetTile(x - 1, y-1);
-                        result[4] = TestMap.GetTile(x - 1, y);
-                    }
-                    if (x + 1 < TestMap.x)
-                    {
-                        result[1] = TestMap.GetTile(x + 1, y-1);
-                        result[2] = TestMap.GetTile(x + 1, y);
-                    }
-
-                }
-                if (y + 1 < TestMap.y)
-                {
-                    result[3] = TestMap.GetTile(x, y + 1);
-                }
+                return null;
             }
+        }
 
-
-            return result;
+        public void PushUnit(Unit unit)
+        {
+            units.Push(unit);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Moru
     public class Res
     {
         #region Field
+        public eRGB colorType;
         #endregion
 
 
@@ -20,9 +21,9 @@ namespace Moru
 
 
         #region Constructor
-        public Res(eRGB colorType)
+        public Res(eRGB colorType, TestTile targetTile)
         {
-
+            this.colorType = colorType;
         }
 
 
