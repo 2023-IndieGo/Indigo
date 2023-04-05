@@ -4,16 +4,43 @@ using UnityEngine;
 
 public partial class Character : BaseModel
 {
-    GamePlayer myGamePlayer;
+
+    #region Field
+    public GamePlayer myGamePlayer { get; private set; }
+
+    public string name;
+
+    public List<Card> specialCards;
 
 
-    public class Hand
+    #endregion
+
+
+    #region Properties
+    #endregion
+
+
+    #region Events
+    #endregion
+
+
+    #region Constructor
+    public Character(GamePlayer player)
     {
-
+        this.myGamePlayer = player;
     }
+    #endregion
 
-    public class TrashCan
-    {
 
-    }
+    #region Public Methods
+    #endregion
+
+
+    #region Private/Protected Methods
+    #endregion
+
+
+
+
 }
+

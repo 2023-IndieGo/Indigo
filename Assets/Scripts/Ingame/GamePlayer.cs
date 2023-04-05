@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 
-public class GamePlayer
+public partial class GamePlayer
 {
     #region Field / Properties / Event
 
@@ -164,6 +164,8 @@ public class GamePlayer
     /// 플레이어의 턴타입이 바뀌면 발동하는 이벤트 메서드
     /// </summary>
     public event OnValueChange<TurnType> On_TurnType_Change;
+
+
     #endregion
 
 
@@ -176,10 +178,19 @@ public class GamePlayer
     /// </summary>
     public event Del_NoRet_NoParams OnPlayer_Die_Event;
 
+    public event Del_NoRet_NoParams OnPlayer_Card_FieldDrop;
+
+    public event Del_NoRet_1_Params<Card> OnPlayer_DrawCard;
+
+    public event Del_NoRet_1_Params<Card> OnPlayer_ThrowCard;
+
+    
+
     #endregion
 
 
     #region Constructor
+
     #endregion
 
 

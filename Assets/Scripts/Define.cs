@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 
 
+//복붙해서 쓰면
 #region Field
 #endregion
 
@@ -26,6 +27,8 @@ using System;
 
 #region Private/Protected Methods
 #endregion
+//스크립트가 깔끔해져요 *^^*
+
 
 
 /// <summary>
@@ -35,11 +38,31 @@ using System;
 /// <param name="before"></param>
 /// <param name="after"></param>
 public delegate void OnValueChange<T>(T before, T after);
+public delegate void Del_NoRet_1_Params<T>(T value);
 
 public delegate void Del_NoRet_NoParams();
 
 
-public enum TurnType { Attack_Turn, Defence_Turn }
+public enum TurnType 
+{ 
+    Attack_Turn,
+    Defence_Turn 
+}
+
+public enum GameState
+{
+    Start = 0,
+    Prepare,
+    Battle,
+    End
+}
+
+public enum CardType
+{
+    Scissors,
+    Rock,
+    Paper,
+}
 public class Define : MonoBehaviour
 {
 }
