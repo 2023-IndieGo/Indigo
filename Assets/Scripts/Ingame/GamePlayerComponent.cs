@@ -33,4 +33,8 @@ public partial class GamePlayer
         public Stack<Card> cards
         { get => _cards; set => _cards = value; }
     }
+
+
+    public Field field;
+    
 }
