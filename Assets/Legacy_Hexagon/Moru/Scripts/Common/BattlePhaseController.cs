@@ -7,5 +7,20 @@ using UnityEngine;
 /// </summary>
 public class BattlePhaseController : MonoBehaviour
 {
-    
+    //
+    public void Init()
+    {
+        //플레이어 정보 받아옴
+    }
+
+
+    public void TryBattle(Card Attacker, Card Defender)
+    {
+
+    }
+
+    private CardBattleResult GetBattleResult_Attaker()
+    {
+        return CardBattleResult.Success;
+    }
 }

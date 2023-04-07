@@ -7,7 +7,8 @@ public class Card : BaseModel
     #region Field
     public CardType type;
     public string name;
-    public string explain;
+    public string Attack_explain;
+    public string Defence_explain;
 
 
 
@@ -45,7 +46,6 @@ public class Card : BaseModel
     {
         Debug.Log($"{this.name}을 필드에 냈습니다.");
     }
-
 
     #endregion
 

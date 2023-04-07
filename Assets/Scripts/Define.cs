@@ -69,6 +69,11 @@ public enum CardType
     Rock,
     Paper,
 }
+public enum CardBattleResult
+{
+    Success,
+    Fails
+}
 public class Define : MonoBehaviour
 {
 }
