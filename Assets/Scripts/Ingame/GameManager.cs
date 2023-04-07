@@ -8,7 +8,7 @@ using UnityEngine;
 /// 인게임이 종료되면 GameManager
 /// null로 바꾸고 이벤트를 모두 날려야함.
 /// </summary>
-public class GameManager
+public class GameManager : SingletonMono<GameManager>
 {
     #region Field
     private GameState _cur_GameState;
@@ -20,12 +20,14 @@ public class GameManager
         get => cur_GameState;
     }
 
+    public Server_authority_Type server_Authority { get; private set; }
+
     /// <summary>
     /// 인게임인지 아닌지 나타내는 불린 변수:
     /// true : 인게임 ___/___
     /// false : 인게임이 아님
     /// </summary>
-    public bool isGaming= false;
+    public bool isGaming = false;
 
     private float _prepare_CurTime;
     /// <summary>
@@ -63,7 +65,22 @@ public class GameManager
     #endregion
 
 
-    #region Properties
+    #region Reference
+    private BattlePhaseController _battleController;
+    public BattlePhaseController battleController
+    {
+        get
+        {
+            if (_battleController == null)
+            { _battleController = GameObject.FindObjectOfType<BattlePhaseController>(); }
+            if (_battleController == null)
+            {
+                GameObject obj = new GameObject("BattleController");
+                _battleController = obj.AddComponent<BattlePhaseController>();
+            }
+            return _battleController;
+        }
+    }
 
     #endregion
 
@@ -88,25 +105,15 @@ public class GameManager
 
 
     #region Constructor
-    public GameManager(GamePlayer me, GamePlayer otherPlayer)
-    {
-        this.players[0] = me;
-        this.players[1] = otherPlayer;
-    }
+
     #endregion
 
 
     #region Public Methods
-    public void Init()
-    {
-        StateEvents.Add(GameState.Start, new GameStateEventTrigger());
-        StateEvents.Add(GameState.Prepare, new GameStateEventTrigger());
-        StateEvents.Add(GameState.Battle, new GameStateEventTrigger());
-        StateEvents.Add(GameState.End, new GameStateEventTrigger());
-    }
+
     public void Destroy()
     {
-        for (int i = 0; i < (int)GameState.End+1; i++)
+        for (int i = 0; i < (int)GameState.End + 1; i++)
         {
             StateEvents[(GameState)i] = null;
         }
@@ -181,6 +188,56 @@ public class GameManager
 
 
     #region Private/Protected Methods
+    protected override void Awake()
+    {
+        base.Awake();
+        //이벤트 초기화
+        EventInit();
+        //게임을 먼저 세팅하는 단계 (필요한 데이터 받아오기 단계)
+        SetGameState(GameState.Setting_Game);
+        //자기 플레이어의 데이터를 가져옵니다.
+        GetPlayerData();
+    }
+
+    /// <summary>
+    /// 게임매니저 Awake 단계에서 자신의 초기화 진행
+    /// </summary>
+    private void EventInit()
+    {
+        StateEvents.Add(GameState.Setting_Game, new GameStateEventTrigger());
+        StateEvents.Add(GameState.Start, new GameStateEventTrigger());
+        StateEvents.Add(GameState.Prepare, new GameStateEventTrigger());
+        StateEvents.Add(GameState.Battle, new GameStateEventTrigger());
+        StateEvents.Add(GameState.End, new GameStateEventTrigger());
+    }
+    private void GetPlayerData()
+    {
+        //GamePlayer를 새로 생성하여 
+        //자신 플레이어 데이터를 기반으로 GamePlayer 초기화 및
+        //players[0]에 할당
+        //GamePlayer를 추가로 새로 생성하여
+        //상대 플레이어 데이터를 가져오기를 시도.
+        //내부 비동기 코루틴으로 상대 플레이어 정보를 지속적으로 가져오기를 시도,
+        StartCoroutine(TryGetOtherPlayerInfo());
+        IEnumerator TryGetOtherPlayerInfo()
+        {
+            //일정시간마다, 최대대기시간까지 or 상대플레이어 데이터를 받아올 때 까지
+            while (true)
+            {
+                //상대플레이어 데이터 받아오기 시도 (이건 나중작업으로)
+                yield return null;
+            }
+            //성공 시 
+            //players[1]에 할당
+            //실패 시 서버 접속이 실패됨 (네트워킹 매니저에게 추후 이전될 동작)
+            //서버에 대한 호스트/클라 여부를 게임매니저 변수
+            server_Authority = Server_authority_Type.Host;
+            //에 할당
+            //게임 스테이트 이제 스타트로 변경
+            SetGameState(GameState.Start);
+        }
+
+    }
     #endregion
 
 

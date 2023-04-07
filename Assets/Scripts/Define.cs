@@ -42,6 +42,11 @@ public delegate void Del_NoRet_1_Params<T>(T value);
 
 public delegate void Del_NoRet_NoParams();
 
+public enum Server_authority_Type
+{
+    Host,
+    Client
+}
 
 public enum TurnType 
 { 
@@ -54,7 +59,8 @@ public enum GameState
     Start = 0,
     Prepare,
     Battle,
-    End
+    End,
+    Setting_Game = 100
 }
 
 public enum CardType

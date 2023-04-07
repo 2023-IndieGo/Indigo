@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingleToneMono<T> : MonoBehaviour where T : SingleToneMono<T>
+public class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
 {
     protected static T m_instance;
     public static T instance { get { if (m_instance == null) m_instance = FindObjectOfType<T>(); return m_instance; } }

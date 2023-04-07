@@ -7,7 +7,7 @@ namespace Lagacy_Hexagon
 {
     namespace Moru
     {
-        public class TsetMono : SingleToneMono<TsetMono>
+        public class TsetMono : SingletonMono<TsetMono>
         {
 
             //public float offset = 1.7f;
