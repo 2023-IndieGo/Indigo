@@ -82,24 +82,13 @@ public class GameManager : SingletonMono<GameManager>
         }
     }
 
+    public EventTrigger events { get; private set; }
+
     #endregion
 
 
     #region Events
-    Dictionary<GameState, GameStateEventTrigger> StateEvents;
-    class GameStateEventTrigger
-    {
-        public Del_NoRet_NoParams start;
-        public Del_NoRet_NoParams update;
-        public Del_NoRet_NoParams exit;
 
-        public GameStateEventTrigger(Del_NoRet_NoParams start = null, Del_NoRet_NoParams update = null, Del_NoRet_NoParams exit = null)
-        {
-            this.start += start;
-            this.update += update;
-            this.exit += exit;
-        }
-    }
 
     #endregion
 
@@ -113,10 +102,7 @@ public class GameManager : SingletonMono<GameManager>
 
     public void Destroy()
     {
-        for (int i = 0; i < (int)GameState.End + 1; i++)
-        {
-            StateEvents[(GameState)i] = null;
-        }
+
     }
     /// <summary>
     /// 게임의 상태를 변경합니다.
@@ -125,64 +111,19 @@ public class GameManager : SingletonMono<GameManager>
     /// <param name="targetState"></param>
     public void SetGameState(GameState targetState)
     {
-        if (StateEvents.TryGetValue(targetState, out var cur_State))
-        {
-            cur_State.exit?.Invoke();
-        }
-        if (StateEvents.TryGetValue(targetState, out var next_State))
-        {
-            next_State.start?.Invoke();
-        }
-        _cur_GameState = targetState;
+        events.about_GameManager.SetGameState(targetState);
     }
 
-    /// <summary>
-    /// 해당 게임스테이트에 매개변수 메서드를 등록합니다.
-    /// </summary>
-    /// <param name="targetStage"></param>
-    /// <param name="start"></param>
-    /// <param name="update"></param>
-    /// <param name="exit"></param>
-    public void AddEventOnState(GameState targetState, Del_NoRet_NoParams start = null, Del_NoRet_NoParams update = null, Del_NoRet_NoParams exit = null)
-    {
-        if (StateEvents.TryGetValue(targetState, out var value))
-        {
-            value.start += start;
-            value.update += update;
-            value.exit += exit;
-        }
-        else
-        {
-            StateEvents.Add(targetState, new GameStateEventTrigger(start, update, exit));
-        }
-    }
 
-    /// <summary>
-    /// 해당 게임스테이트에 매개변수 메서드를 제거합니다.
-    /// </summary>
-    /// <param name="targetState"></param>
-    /// <param name="start"></param>
-    /// <param name="update"></param>
-    /// <param name="exit"></param>
-    public void DeleteEventOnState(GameState targetState, Del_NoRet_NoParams start = null, Del_NoRet_NoParams update = null, Del_NoRet_NoParams exit = null)
-    {
-        if (StateEvents.TryGetValue(targetState, out var value))
-        {
-            value.start -= start;
-            value.update -= update;
-            value.exit -= exit;
-        }
-    }
+
+
 
     /// <summary>
     /// 게임상태 업데이트문
     /// </summary>
     public void Update()
     {
-        if (StateEvents.TryGetValue(cur_GameState, out var cur_State))
-        {
-            cur_State.update?.Invoke();
-        }
+        events.about_GameManager.Update();
     }
     #endregion
 
@@ -191,25 +132,18 @@ public class GameManager : SingletonMono<GameManager>
     protected override void Awake()
     {
         base.Awake();
-        //이벤트 초기화
-        EventInit();
+        //자체변수 초기화
+        //이벤트 트리거 클래스 초기화
+        events = new EventTrigger();
+
+        //게임플레이 준비 사전테스트
         //게임을 먼저 세팅하는 단계 (필요한 데이터 받아오기 단계)
         SetGameState(GameState.Setting_Game);
         //자기 플레이어의 데이터를 가져옵니다.
         GetPlayerData();
     }
 
-    /// <summary>
-    /// 게임매니저 Awake 단계에서 자신의 초기화 진행
-    /// </summary>
-    private void EventInit()
-    {
-        StateEvents.Add(GameState.Setting_Game, new GameStateEventTrigger());
-        StateEvents.Add(GameState.Start, new GameStateEventTrigger());
-        StateEvents.Add(GameState.Prepare, new GameStateEventTrigger());
-        StateEvents.Add(GameState.Battle, new GameStateEventTrigger());
-        StateEvents.Add(GameState.End, new GameStateEventTrigger());
-    }
+
     private void GetPlayerData()
     {
         //GamePlayer를 새로 생성하여 

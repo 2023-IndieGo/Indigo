@@ -14,6 +14,7 @@ public partial class Character : BaseModel
     {
         public new virtual void Init()
         {
+            //baseModel.Init()
             base.Init();
         }
     }
@@ -22,12 +23,22 @@ public partial class Character : BaseModel
     {
         public string name;
         public string explain;
+        public override void Init()
+        {
+            //Skill.Init()
+            base.Init();
+        }
     }
 
     public class UltimateSkill : Skill
     {
         public string name;
         public string explain;
+        public override void Init()
+        {
+            //Skill.Init()
+            base.Init();
+        }
     }
 
 }

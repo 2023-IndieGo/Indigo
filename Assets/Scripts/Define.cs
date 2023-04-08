@@ -39,6 +39,7 @@ using System;
 /// <param name="after"></param>
 public delegate void OnValueChange<T>(T before, T after);
 public delegate void Del_NoRet_1_Params<T>(T value);
+public delegate void Del_NoRet_2_Params<T, U>(T first, U second);
 
 public delegate void Del_NoRet_NoParams();
 
@@ -73,6 +74,14 @@ public enum CardBattleResult
 {
     Success,
     Fails
+}
+
+public enum UnitWhere
+{
+    Deck,
+    Hand,
+    Trash,
+    Field
 }
 public class Define : MonoBehaviour
 {

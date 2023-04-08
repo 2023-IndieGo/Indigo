@@ -8,46 +8,27 @@ public partial class GamePlayer
 {
     #region Field / Properties / Event
 
-    private int _default_DrawCard_Attack;
-    /// <summary>
-    /// 공격 턴 시 뽑는 카드의 수
-    /// </summary>
-    public int default_DrawCard_Attack { get => _default_DrawCard_Attack; set
-        {
-            int before = _default_DrawCard_Attack;
-            _default_DrawCard_Attack = value;
-            if(value != before)
-            {
-                On_default_DrawCard_Attack_Value_Change?.Invoke(before, value);
-            }
-        }
-    }
-    /// <summary>
-    /// 공격턴 시 뽑는 카드의 수가 변화할 경우 발생하는 이벤트
-    /// </summary>
-    public event OnValueChange<int> On_default_DrawCard_Attack_Value_Change;
 
-
-    private int _default_DrawCard_Defence;
+    private int _default_DrawCard_Count;
     /// <summary>
     /// 방어 턴 시 뽑는 카드의 수
     /// </summary>
-    public int default_DrawCard_Defence
+    public int default_DrawCard_Count
     {
-        get => _default_DrawCard_Defence; set
+        get => _default_DrawCard_Count; set
         {
-            int before = _default_DrawCard_Defence;
-            _default_DrawCard_Defence = value;
+            int before = _default_DrawCard_Count;
+            _default_DrawCard_Count = value;
             if (value != before)
             {
-                On_default_DrawCard_Defence_Value_Change?.Invoke(before, value);
+                On_default_DrawCard_Count_Value_Change?.Invoke(before, value);
             }
         }
     }
     /// <summary>
     /// 방어턴 시 뽑는 카드의 수가 변화할 경우 발생하는 이벤트
     /// </summary>
-    public event OnValueChange<int> On_default_DrawCard_Defence_Value_Change;
+    public OnValueChange<int> On_default_DrawCard_Count_Value_Change;
 
 
     private int _current_Health;
@@ -64,16 +45,12 @@ public partial class GamePlayer
             {
                 On_Current_Health_Value_Change?.Invoke(before, value);
             }
-            if(current_Health <= 0)
-            {
-                OnPlayer_Die_Event?.Invoke();
-            }
         }
     }
     /// <summary>
     /// 현재체력 변화시 발생하는 이벤트
     /// </summary>
-    public event OnValueChange<int> On_Current_Health_Value_Change;
+    public OnValueChange<int> On_Current_Health_Value_Change;
 
 
     private int _max_Health;
@@ -95,7 +72,7 @@ public partial class GamePlayer
     /// <summary>
     /// 기본체력 변화시 발생하는 이벤트
     /// </summary>
-    public event OnValueChange<int> On_Max_Health_Value_Change;
+    public OnValueChange<int> On_Max_Health_Value_Change;
 
 
     private int _current_Shield;
@@ -117,7 +94,7 @@ public partial class GamePlayer
     /// <summary>
     /// 현재 방어막 변화시 발생하는 이벤트
     /// </summary>
-    public event OnValueChange<int> On_Current_Shield_Value_Change;
+    public OnValueChange<int> On_Current_Shield_Value_Change;
 
     /****주석처리 : 최대방어막****
     private int _max_Shield;
@@ -163,28 +140,8 @@ public partial class GamePlayer
     /// <summary>
     /// 플레이어의 턴타입이 바뀌면 발동하는 이벤트 메서드
     /// </summary>
-    public event OnValueChange<TurnType> On_TurnType_Change;
+    public OnValueChange<TurnType> On_TurnType_Change;
 
-
-    #endregion
-
-
-
-    #region Events
-
-    /// <summary>
-    /// 플레이어의 체력이 0이 되면 발생하는 이벤트
-    /// !주의! 게임끝이 아님!
-    /// </summary>
-    public event Del_NoRet_NoParams OnPlayer_Die_Event;
-
-    public event Del_NoRet_NoParams OnPlayer_Card_FieldDrop;
-
-    public event Del_NoRet_1_Params<Card> OnPlayer_DrawCard;
-
-    public event Del_NoRet_1_Params<Card> OnPlayer_ThrowCard;
-
-    
 
     #endregion
 
