@@ -42,6 +42,7 @@ public class EventTrigger
 
         public GameManagerEventHanler()
         {
+            StateEvents = new Dictionary<GameState, GameStateEventTrigger>();
             StateEvents.Add(GameState.Setting_Game, new GameStateEventTrigger());
             StateEvents.Add(GameState.Start, new GameStateEventTrigger());
             StateEvents.Add(GameState.Prepare, new GameStateEventTrigger());
@@ -158,7 +159,10 @@ public class EventTrigger
         /// <summary>
         /// 쓰레기통이 카드를 쌓을 경우
         /// </summary>
-        public Del_NoRet_NoParams OnGetCard_From_Deck;
+        public Del_NoRet_1_Params<Card> OnGetCard;
+
+
+
         /// <summary>
         /// 쓰레기통이 비워질 경우
         /// </summary>
@@ -181,7 +185,13 @@ public class EventTrigger
         /// 해당구역에 있는 카드를 없앨 경우 발생하는 이벤트
         /// </summary>
         public Del_NoRet_2_Params<Card, Field.Zone> OnRemoveCard_From_Zone;
-        
+
+        /// <summary>
+        /// 해당 구역에 특정한 카드가 생길 경우 발생하는 이벤트 (내는 것이랑 다름)
+        /// </summary>
+        public Del_NoRet_2_Params<Card, Field.Zone> OnCreateCard;
+
+
     }
 
 

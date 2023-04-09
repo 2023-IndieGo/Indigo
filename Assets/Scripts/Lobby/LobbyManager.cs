@@ -32,11 +32,13 @@ public class LobbyManager : MonoBehaviour
 
     public void OnExit()
     {
-        if(Application.isEditor)
+        #if UNITY_EDITOR
+        if (Application.isEditor)
         {
             UnityEditor.EditorApplication.ExitPlaymode();
         }
-        else
+#endif
+        if(!Application.isEditor)
         {
             Application.Quit();
         }

@@ -39,7 +39,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         // -> 완전 접속된 후의 처리
 
-        
+
     }
 
 
@@ -83,8 +83,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         base.OnCreatedRoom();
         var roomName = PhotonNetwork.CurrentRoom.Name;
-        debugger.ShowText($"Success Create Room. RoomNumber : {roomName }");
-        codeText.text = $"{roomName }";
+        debugger.ShowText($"Success Create Room. RoomNumber : {roomName}");
+        codeText.text = $"{roomName}";
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -94,26 +94,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         codeText.text = "Try Creating...";
     }
 
-    
-    
+    public void OnLeftServer()
+    {
+        if (PhotonNetwork.CurrentRoom != null)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
+    }
+
 
     //Join시 매치매이킹서버로부터 접속 시도,
     public void Connect()
     {
         //중복접속 안되도록 처리
 
-        //잘 접속되어있는 상태라면
-        if(PhotonNetwork.IsConnected)
-        {
-            //접속중
-            PhotonNetwork.JoinRandomRoom();
-        }
-        //아니라면
-        else
-        {
-            //재접속 시도
-            PhotonNetwork.ConnectUsingSettings();
-        }
+
     }
 
     //조인랜덤룸 -> 비어있는 방이 없음
@@ -125,7 +121,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void TryJoinGame()
     {
         string GameName = inputCode.text;
-        PhotonNetwork.JoinRoom("GameName");
+        //잘 접속되어있는 상태라면
+        if (PhotonNetwork.IsConnected)
+        {
+            //접속중
+            PhotonNetwork.JoinRoom($"{GameName}");
+        }
+        //아니라면
+        else
+        {
+            //재접속 시도
+            PhotonNetwork.ConnectUsingSettings();
+        }
         JoinBtn.interactable = false;
     }
 
@@ -140,9 +147,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
+        debugger.ShowText($"Success Join Room!");
         //씬 로딩
         //debugger.ShowText("");
-        //PhotonNetwork.LoadLevel("GameScene");
+#if UNITY_EDITOR
+        //테스트 코드입니다.
+        //PhotonNetwork.LoadLevel("Ingame");
+
+#endif
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            PhotonNetwork.LoadLevel("Ingame");
+        }
     }
 
     public class Debugger : MonoBehaviour
@@ -159,14 +180,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         private void Update()
         {
-            if(t < maxTime)
+            if (t < maxTime)
             {
                 t += Time.deltaTime;
             }
-            else if(t >= maxTime && text.color.a >0)
+            else if (t >= maxTime && text.color.a > 0)
             {
-                text.color = new Color(1,0,0, alpha);
-                alpha -= Time.deltaTime*threshold;
+                text.color = new Color(1, 0, 0, alpha);
+                alpha -= Time.deltaTime * threshold;
             }
         }
 

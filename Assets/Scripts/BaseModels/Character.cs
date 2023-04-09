@@ -12,7 +12,6 @@ public partial class Character : BaseModel
 
     public List<Card> specialCards;
 
-
     #endregion
 
 
@@ -28,6 +27,8 @@ public partial class Character : BaseModel
     public Character(GamePlayer player)
     {
         this.myGamePlayer = player;
+        passive = new Passive();
+        ultimateSkill = new UltimateSkill();
     }
     #endregion
 
