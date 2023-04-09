@@ -4,7 +4,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 
-
+[System.Serializable]
 public partial class GamePlayer
 {
     #region Field / Properties / Event
@@ -132,7 +132,7 @@ public partial class GamePlayer
         {
             TurnType before = _current_TurnType;
             _current_TurnType = value;
-            if(before != value)
+            if (before != value)
             {
                 On_TurnType_Change?.Invoke(before, value);
             }
@@ -166,6 +166,22 @@ public partial class GamePlayer
         //초기화 되며 필요데이터가 자동초기화
 
         Debug.Log($"플레이어 정보 생성");
+
+        
+    }
+    public void Init()
+    {
+        //프리페어 이벤트 추가
+        GameManager.instance.events.about_GameManager.AddEventOnState(GameState.Prepare,
+            //start
+            () =>
+            {
+                for (int i = 0; i < default_DrawCard_Count; i++)
+                {
+                    deckData.DrawRandomCard_ToHand();
+                }
+            }
+        );
     }
     #endregion
 

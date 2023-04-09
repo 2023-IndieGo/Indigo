@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3306ea70d8ad2b41aa94c2764926e6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleController: {fileID: 0}
 --- !u!4 &686756769
 Transform:
   m_ObjectHideFlags: 0
@@ -238,8 +239,8 @@ MonoBehaviour:
   prepare_CurTime: 0
   default_PrepareTime: 5
   prepareTime_IncreaseRate: 1.1
-  _battleController: {fileID: 0}
-  _batteConnecter: {fileID: 0}
+  _battleController: {fileID: 1572606518}
+  _batteConnecter: {fileID: 686756768}
 --- !u!1 &1559170152
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,6 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60ac711195046244a93f72a9f045325e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cur_State: 0
 --- !u!1 &2093789265
 GameObject:
   m_ObjectHideFlags: 0

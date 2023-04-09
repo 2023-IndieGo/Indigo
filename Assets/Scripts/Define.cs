@@ -73,7 +73,7 @@ public enum CardType
 public enum CardBattleResult
 {
     Success,
-    Fails
+    Fail
 }
 
 public enum UnitWhere

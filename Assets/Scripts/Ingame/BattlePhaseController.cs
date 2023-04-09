@@ -14,6 +14,7 @@ public class BattlePhaseController : MonoBehaviour
         End
     }
 
+    public BattleConnecter connecter;
     public BattlePhaseState _cur_State;
     public BattlePhaseEventTrigger events;
     public BattlePhaseState cur_State => _cur_State;
@@ -96,6 +97,10 @@ public class BattlePhaseController : MonoBehaviour
         }
     }
 
+    public GamePlayer myPlayer;
+    public GamePlayer otherPlayer;
+
+
     public void Awake()
     {
         StateEvents = new Dictionary<BattlePhaseState, BattlePhaseEventTrigger>();
@@ -111,12 +116,21 @@ public class BattlePhaseController : MonoBehaviour
             //start
             () =>
             {
+                SetBattlePhase(BattlePhaseState.Setting);
                 //BattleConnecter로부터 플레이어정보를 받아오기 시도
                 //배틀커넥터에서는 플레이어 정보를 받아옴과 동시에 배틀페이즈를 스타르로 바꿈
+                myPlayer = GameManager.instance.players[0];
+                otherPlayer = connecter.GetOtherPlayer();
+                GameManager.instance.players[1] = otherPlayer;
+                if(otherPlayer != null)
+                {
+                    SetBattlePhase(BattlePhaseState.Start);
+                }
             },
             //update
             () =>
             {
+
             },
 
             //exit
