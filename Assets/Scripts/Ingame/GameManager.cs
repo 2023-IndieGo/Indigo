@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 
 /// <summary>
@@ -11,6 +12,9 @@ using UnityEngine;
 public class GameManager : SingletonMono<GameManager>
 {
     #region Field
+
+    private bool isConnectedClientMaster = PhotonNetwork.IsMasterClient;
+
     private GameState _cur_GameState;
     /// <summary>
     /// 현재 게임의 상태입니다.
@@ -149,26 +153,44 @@ public class GameManager : SingletonMono<GameManager>
         //GamePlayer를 새로 생성하여 
         //자신 플레이어 데이터를 기반으로 GamePlayer 초기화 및
         //players[0]에 할당
-        //GamePlayer를 추가로 새로 생성하여
+        GamePlayer pl = new GamePlayer();
+        players[0] = isConnectedClientMaster ? pl : null;
+        int insertAdress = isConnectedClientMaster ? 1 : 0;
+        GamePlayer secPl = isConnectedClientMaster ? players[1] : players[0];
         //상대 플레이어 데이터를 가져오기를 시도.
         //내부 비동기 코루틴으로 상대 플레이어 정보를 지속적으로 가져오기를 시도,
         StartCoroutine(TryGetOtherPlayerInfo());
         IEnumerator TryGetOtherPlayerInfo()
         {
-            //일정시간마다, 최대대기시간까지 or 상대플레이어 데이터를 받아올 때 까지
-            while (true)
+            float maxWaitTime = 5;
+            float currentTime = 0;
+            //일정 시간이 지날때까지, 혹은 플레이어 정보가 null이 아닐때까지
+            while (currentTime >= maxWaitTime || secPl != null)
             {
-                //상대플레이어 데이터 받아오기 시도 (이건 나중작업으로)
+
+                //상대플레이어 데이터 받아오기 시도 => 포톤넷워크
+
+                currentTime += Time.deltaTime;
                 yield return null;
             }
             //성공 시 
             //players[1]에 할당
-            //실패 시 서버 접속이 실패됨 (네트워킹 매니저에게 추후 이전될 동작)
-            //서버에 대한 호스트/클라 여부를 게임매니저 변수
-            server_Authority = Server_authority_Type.Host;
-            //에 할당
-            //게임 스테이트 이제 스타트로 변경
-            SetGameState(GameState.Start);
+            if (secPl != null)
+            {
+                players[insertAdress] = secPl;
+                //서버에 대한 호스트/클라 여부를 게임매니저 변수
+                server_Authority = isConnectedClientMaster ? Server_authority_Type.Host : Server_authority_Type.Client;
+                //에 할당
+                //게임 스테이트 이제 스타트로 변경
+                SetGameState(GameState.Start);
+            }
+            //접속실패
+            else
+            {
+                //실패 시 서버 접속이 실패됨 (네트워킹 매니저에게 추후 이전될 동작)
+                //자동으로 로비로 돌아가기
+            }
+            
         }
 
     }
