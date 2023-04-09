@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Sirenix.OdinInspector;
 
 
 /// <summary>
@@ -11,40 +13,42 @@ using UnityEngine;
 public class GameManager : SingletonMono<GameManager>
 {
     #region Field
+    [TitleGroup("Field")]
+
+    [ShowInInspector, LabelText("isHost")]
+    private bool isConnectedClientMaster = PhotonNetwork.IsMasterClient;
+    [ShowInInspector, LabelText("Server_Authority")]
+    public Server_authority_Type server_Authority { get; private set; }
+
+
+    [ShowInInspector, LabelText("게임 상태")]
     private GameState _cur_GameState;
     /// <summary>
     /// 현재 게임의 상태입니다.
     /// </summary>
     public GameState cur_GameState
     {
-        get => cur_GameState;
+        get => _cur_GameState;
     }
 
-    public Server_authority_Type server_Authority { get; private set; }
 
-    /// <summary>
-    /// 인게임인지 아닌지 나타내는 불린 변수:
-    /// true : 인게임 ___/___
-    /// false : 인게임이 아님
-    /// </summary>
-    public bool isGaming = false;
-
-    private float _prepare_CurTime;
     /// <summary>
     /// 준비단계의 진행되고 있는 현재시간입니다.
     /// </summary>
+    [LabelText("턴 종료까지의 시간")]
     public float prepare_CurTime;
 
     /// <summary>
     /// 준비단계 진입 시 각 턴마다의 주어지는 시간입니다.
     /// </summary>
+    [ShowInInspector, LabelText("주어진 준비시간"), ReadOnly]
     public float _prepare_maxTime => default_PrepareTime * prepareTime_IncreaseRate * current_Turn;
 
     private float _default_PrepareTime;
     /// <summary>
     /// 기본 준비단계 시간입니다.
     /// </summary>
-    public float default_PrepareTime;
+    public float default_PrepareTime = 30;
 
     private float _prepareTime_IncreaseRate = 1.1f;
     /// <summary>
@@ -52,12 +56,14 @@ public class GameManager : SingletonMono<GameManager>
     /// </summary>
     public float prepareTime_IncreaseRate;
 
-    private uint _current_Turn = 1;
+    [ShowInInspector, LabelText("현재 턴 수")]
+    private uint _current_Turn = 0;
     /// <summary>
     /// 현재 턴이 몇 턴인지 알려주는 필드변수입니다.
     /// </summary>
     public uint current_Turn => _current_Turn;
 
+    [ShowInInspector, LabelText("플레이어 데이터")]
     /// <summary>
     /// 현재 게임의 플레이어 데이터 배열입니다. [0] = 나, [1] = 상대방
     /// </summary>
@@ -66,6 +72,7 @@ public class GameManager : SingletonMono<GameManager>
 
 
     #region Reference
+    [TitleGroup("Reference"),  SerializeField]
     private BattlePhaseController _battleController;
     public BattlePhaseController battleController
     {
@@ -79,6 +86,23 @@ public class GameManager : SingletonMono<GameManager>
                 _battleController = obj.AddComponent<BattlePhaseController>();
             }
             return _battleController;
+        }
+    }
+
+    [SerializeField]
+    private BattleConnecter _batteConnecter;
+    public BattleConnecter battleConnecter
+    {
+        get
+        {
+            if (_batteConnecter == null)
+            { _batteConnecter = GameObject.FindObjectOfType<BattleConnecter>(); }
+            if (_batteConnecter == null)
+            {
+                GameObject obj = new GameObject("BattleController");
+                _batteConnecter = obj.AddComponent<BattleConnecter>();
+            }
+            return _batteConnecter;
         }
     }
 
@@ -112,6 +136,7 @@ public class GameManager : SingletonMono<GameManager>
     public void SetGameState(GameState targetState)
     {
         events.about_GameManager.SetGameState(targetState);
+        _cur_GameState = targetState;
     }
 
 
@@ -136,6 +161,9 @@ public class GameManager : SingletonMono<GameManager>
         //이벤트 트리거 클래스 초기화
         events = new EventTrigger();
 
+        OnPrepareEventAdd();    //이벤트 등록
+
+
         //게임플레이 준비 사전테스트
         //게임을 먼저 세팅하는 단계 (필요한 데이터 받아오기 단계)
         SetGameState(GameState.Setting_Game);
@@ -149,30 +177,81 @@ public class GameManager : SingletonMono<GameManager>
         //GamePlayer를 새로 생성하여 
         //자신 플레이어 데이터를 기반으로 GamePlayer 초기화 및
         //players[0]에 할당
-        //GamePlayer를 추가로 새로 생성하여
+        GamePlayer pl = new GamePlayer();
+        players[0] = isConnectedClientMaster ? pl : null;
+        int insertAdress = isConnectedClientMaster ? 1 : 0;
+        GamePlayer secPl = isConnectedClientMaster ? players[1] : players[0];
+
+        //host가 일단 첫공을 때리도록
+        players[0].current_TurnType = TurnType.Attack_Turn;
+
         //상대 플레이어 데이터를 가져오기를 시도.
         //내부 비동기 코루틴으로 상대 플레이어 정보를 지속적으로 가져오기를 시도,
         StartCoroutine(TryGetOtherPlayerInfo());
         IEnumerator TryGetOtherPlayerInfo()
         {
-            //일정시간마다, 최대대기시간까지 or 상대플레이어 데이터를 받아올 때 까지
-            while (true)
+            float maxWaitTime = 5;
+            float currentTime = 0;
+            //일정 시간이 지날때까지, 혹은 플레이어 정보가 null이 아닐때까지
+            while (currentTime >= maxWaitTime || secPl == null)
             {
-                //상대플레이어 데이터 받아오기 시도 (이건 나중작업으로)
+
+                //상대플레이어 데이터 받아오기 시도 => 포톤넷워크
+
+                currentTime += Time.deltaTime;
                 yield return null;
             }
             //성공 시 
             //players[1]에 할당
-            //실패 시 서버 접속이 실패됨 (네트워킹 매니저에게 추후 이전될 동작)
-            //서버에 대한 호스트/클라 여부를 게임매니저 변수
-            server_Authority = Server_authority_Type.Host;
-            //에 할당
-            //게임 스테이트 이제 스타트로 변경
-            SetGameState(GameState.Start);
+            if (secPl != null)
+            {
+                players[insertAdress] = secPl;
+                //서버에 대한 호스트/클라 여부를 게임매니저 변수
+                server_Authority = isConnectedClientMaster ? Server_authority_Type.Host : Server_authority_Type.Client;
+                //에 할당
+                //게임 스테이트 이제 스타트로 변경
+                SetGameState(GameState.Start);
+            }
+            //접속실패
+            else
+            {
+                //실패 시 서버 접속이 실패됨 (네트워킹 매니저에게 추후 이전될 동작)
+                Debug.Log($"GamePlayerData를 얻어오지 못했습니다.");
+                //자동으로 로비로 돌아가기
+            }
+            
         }
 
     }
     #endregion
 
+    #region Private/Protected Method
 
+    private void OnPrepareEventAdd()
+    {
+        events.about_GameManager.AddEventOnState(GameState.Prepare,
+            //Start
+            () =>
+            {
+                _current_Turn++;
+                prepare_CurTime = _prepare_maxTime;
+            },
+            //Update
+            () => 
+            {
+                prepare_CurTime -= Time.deltaTime;
+                if(prepare_CurTime <= 0)
+                {
+                    SetGameState(GameState.Battle);
+                }
+            },
+            //Exit
+            () =>
+            {
+                prepare_CurTime = 0;
+            }
+            );
+    }
+
+    #endregion
 }

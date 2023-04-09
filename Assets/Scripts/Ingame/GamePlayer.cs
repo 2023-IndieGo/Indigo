@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 
 
@@ -53,7 +54,7 @@ public partial class GamePlayer
     public OnValueChange<int> On_Current_Health_Value_Change;
 
 
-    private int _max_Health;
+    private int _max_Health = 30;
     /// <summary>
     /// 기본 체력
     /// </summary>
@@ -119,7 +120,7 @@ public partial class GamePlayer
     public event OnValueChange<int> On_Max_Shield_Value_Change;
     */
 
-
+    [SerializeField, LabelText("턴 타입")]
     private TurnType _current_TurnType;
     /// <summary>
     /// 현재 플레이어의 턴타입
@@ -130,7 +131,7 @@ public partial class GamePlayer
         set
         {
             TurnType before = _current_TurnType;
-            current_TurnType = value;
+            _current_TurnType = value;
             if(before != value)
             {
                 On_TurnType_Change?.Invoke(before, value);
@@ -147,7 +148,25 @@ public partial class GamePlayer
 
 
     #region Constructor
+    public GamePlayer()
+    {
+        //플레이어 필드변수 초기화
+        default_DrawCard_Count = 5;
+        current_Health = max_Health;
+        current_Shield = 0;
 
+        //플레이어 정보 초기화
+        //추후 로비에서 PlayerData를 받아와 로드하도록
+        deckData = new Deck(this);
+        hand = new Hand(this);
+        trash = new TrashCan(this);
+        field = new Field(this);
+        character = new Character(this);
+
+        //초기화 되며 필요데이터가 자동초기화
+
+        Debug.Log($"플레이어 정보 생성");
+    }
     #endregion
 
 

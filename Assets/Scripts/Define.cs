@@ -83,6 +83,12 @@ public enum UnitWhere
     Trash,
     Field
 }
+
+public enum ZoneType
+{
+    Attack,
+    Defence
+}
 public class Define : MonoBehaviour
 {
 }
