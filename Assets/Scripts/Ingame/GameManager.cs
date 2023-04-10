@@ -16,7 +16,7 @@ public class GameManager : SingletonMono<GameManager>
     [TitleGroup("Field")]
 
     [ShowInInspector, LabelText("isHost")]
-    private bool isConnectedClientMaster = PhotonNetwork.IsMasterClient;
+    public bool isConnectedClientMaster = PhotonNetwork.IsMasterClient;
     [ShowInInspector, LabelText("Server_Authority")]
     public Server_authority_Type server_Authority { get; private set; }
 
@@ -178,13 +178,17 @@ public class GameManager : SingletonMono<GameManager>
         //자신 플레이어 데이터를 기반으로 GamePlayer 초기화 및
         //players[0]에 할당
         GamePlayer pl = new GamePlayer();
-        players[0] = isConnectedClientMaster ? pl : null;
-        int insertAdress = isConnectedClientMaster ? 1 : 0;
-        GamePlayer secPl = isConnectedClientMaster ? players[1] : players[0];
+        pl.Init();
+        battleConnecter.Init(pl);
+        //로컬 플레이어의 데이터를 게임매니저의 플레이어 0번에 등록
+        players[0] = pl;
+        int insertAdress = isConnectedClientMaster ? 0 : 1;
+        GamePlayer secPl = battleConnecter.players[insertAdress];
 
-        //host가 일단 첫공을 때리도록
+
         players[0].current_TurnType = TurnType.Attack_Turn;
 
+        
         //상대 플레이어 데이터를 가져오기를 시도.
         //내부 비동기 코루틴으로 상대 플레이어 정보를 지속적으로 가져오기를 시도,
         StartCoroutine(TryGetOtherPlayerInfo());
@@ -195,9 +199,8 @@ public class GameManager : SingletonMono<GameManager>
             //일정 시간이 지날때까지, 혹은 플레이어 정보가 null이 아닐때까지
             while (currentTime >= maxWaitTime || secPl == null)
             {
-
                 //상대플레이어 데이터 받아오기 시도 => 포톤넷워크
-
+                secPl = battleConnecter.players[insertAdress];
                 currentTime += Time.deltaTime;
                 yield return null;
             }
@@ -206,6 +209,8 @@ public class GameManager : SingletonMono<GameManager>
             if (secPl != null)
             {
                 players[insertAdress] = secPl;
+                secPl.current_TurnType = TurnType.Defence_Turn;
+
                 //서버에 대한 호스트/클라 여부를 게임매니저 변수
                 server_Authority = isConnectedClientMaster ? Server_authority_Type.Host : Server_authority_Type.Client;
                 //에 할당

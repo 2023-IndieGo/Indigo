@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 전투단계에서의 전투진행 및 전투결과를 관리하는 컴포넌트
+/// ?????????????? ???????? ?? ?????????? ???????? ????????
 /// </summary>
 public class BattlePhaseController : MonoBehaviour
 {
@@ -14,6 +14,7 @@ public class BattlePhaseController : MonoBehaviour
         End
     }
 
+    public BattleConnecter connecter;
     public BattlePhaseState _cur_State;
     public BattlePhaseEventTrigger events;
     public BattlePhaseState cur_State => _cur_State;
@@ -50,7 +51,7 @@ public class BattlePhaseController : MonoBehaviour
         }
 
         /// <summary>
-        /// 해당 게임스테이트에 매개변수 메서드를 등록합니다.
+        /// ???? ?????????????? ???????? ???????? ??????????.
         /// </summary>
         /// <param name="targetStage"></param>
         /// <param name="start"></param>
@@ -71,7 +72,7 @@ public class BattlePhaseController : MonoBehaviour
         }
 
         /// <summary>
-        /// 해당 게임스테이트에 매개변수 메서드를 제거합니다.
+        /// ???? ?????????????? ???????? ???????? ??????????.
         /// </summary>
         /// <param name="targetState"></param>
         /// <param name="start"></param>
@@ -88,13 +89,17 @@ public class BattlePhaseController : MonoBehaviour
         }
 
         /// <summary>
-        /// 게임상태 업데이트문
+        /// ???????? ??????????
         /// </summary>
         public void Update()
         {
 
         }
     }
+
+    public GamePlayer myPlayer;
+    public GamePlayer otherPlayer;
+
 
     public void Awake()
     {
@@ -107,26 +112,60 @@ public class BattlePhaseController : MonoBehaviour
 
     public void Init()
     {
+        //Enter GameManager=>State.battle event subscribe
         GameManager.instance.events.about_GameManager.AddEventOnState(GameState.Battle,
             //start
             () =>
             {
-                //BattleConnecter로부터 플레이어정보를 받아오기 시도
-                //배틀커넥터에서는 플레이어 정보를 받아옴과 동시에 배틀페이즈를 스타르로 바꿈
+                SetBattlePhase(BattlePhaseState.Setting);
+                //BattleConnecter?????? ?????????????? ???????? ????
+                //???????????????? ???????? ?????? ???????? ?????? ???????????? ???????? ????
+                
             },
             //update
             () =>
             {
+
             },
 
             //exit
             () =>
             {
-                //배틀페이즈가 종료되면 배틀 자체 페이즈를 세팅으로 바꾸며 만일 다시 배틀페이즈 진입 시 세팅부터 시작할 수 있도록
-                SetBattlePhase(BattlePhaseState.Setting);
+                
             }
             );
 
+        //Enter battleState => Setting
+        events.AddEventOnState(BattlePhaseState.Setting,
+            //start
+            () =>
+            {
+                myPlayer = GameManager.instance.players[0];
+                otherPlayer = connecter.GetOtherPlayer();
+                GameManager.instance.players[1] = otherPlayer;
+                if (otherPlayer != null)
+                {
+                    SetBattlePhase(BattlePhaseState.Start);
+                }
+            }, 
+            () => { }, //Update
+            () => { }  //Exit
+            );
+
+        //Enter battleState => Start
+        events.AddEventOnState(BattlePhaseState.Start,
+            () => { }, //start
+            () => { }, //Update
+            () => { }  //Exit
+            );
+
+
+        //Enter battleState => End
+        events.AddEventOnState(BattlePhaseState.End,
+            () => { GameManager.instance.SetGameState(GameState.Prepare); }, //start
+            () => { }, //Update
+            () => { }  //Exit
+            );
     }
 
     public void Update()
@@ -152,5 +191,6 @@ public class BattlePhaseController : MonoBehaviour
     private CardBattleResult GetBattleResult_Attaker()
     {
         return CardBattleResult.Success;
+
     }
 }

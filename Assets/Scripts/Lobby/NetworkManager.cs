@@ -26,12 +26,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        if(PhotonNetwork.IsConnected &&PhotonNetwork.CurrentRoom != null)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
         debugger = DebugerText.gameObject.AddComponent<Debugger>();
         debugger.Init(DebugerText);
         debugger.ShowText("Game Initialized...Try Connecting");
         lobby.SetInit(false);
 
-        //부가적인 마스터서버 조인
+        //마스터서버 조인
         PhotonNetwork.GameVersion = gameVersion;
         PhotonNetwork.ConnectUsingSettings();
 
@@ -42,7 +46,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     }
 
-
+    /// <summary>
+    /// 마스터서버에 연결되면 실행되는 콜백
+    /// </summary>
     public override void OnConnectedToMaster()
     {
 
@@ -52,6 +58,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         lobby.SetInit(true);
     }
 
+    /// <summary>
+    /// 연결이 끊기면 실행되는 콜백
+    /// </summary>
+    /// <param name="cause"></param>
     public override void OnDisconnected(DisconnectCause cause)
     {
         base.OnDisconnected(cause);
@@ -62,6 +72,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    /// <summary>
+    /// 방만들기 커스텀메서드
+    /// </summary>
     public void CreateRoom()
     {
         int randomNum = Random.Range(1000000, 10000000);
@@ -74,11 +87,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     }
 
+    /// <summary>
+    /// 룸 설정 : private?public
+    /// value : true : private // false : public
+    /// </summary>
+    /// <param name="value"></param>
     public void OnToggleChange(bool value)
     {
         PhotonNetwork.CurrentRoom.IsVisible = !value;
     }
 
+    /// <summary>
+    /// 방을 생성하게 되면 콜백되는 메서드
+    /// </summary>
     public override void OnCreatedRoom()
     {
         base.OnCreatedRoom();
@@ -111,13 +132,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
     }
-
-    //조인랜덤룸 -> 비어있는 방이 없음
+    /// <summary>
+    /// 조인랜덤룸 -> 비어있는 방이 없음
+    /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         base.OnJoinRandomFailed(returnCode, message);
     }
 
+    /// <summary>
+    /// 작성한 코드네임으로의 접속을 시도하는 커스텀메서드
+    /// </summary>
     public void TryJoinGame()
     {
         string GameName = inputCode.text;
@@ -136,6 +163,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         JoinBtn.interactable = false;
     }
 
+    /// <summary>
+    /// 방 진입에 실패하면 콜백되는 메서드
+    /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         base.OnJoinRoomFailed(returnCode, message);
@@ -143,13 +175,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         JoinBtn.interactable = true;
     }
 
-    //방 접속 성공, 혹은 방을 만들고 접속완료
+    /// <summary>
+    /// 방에 진입 시 (방 생성시 포함) 콜백되는 메서드
+    /// </summary>
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
         debugger.ShowText($"Success Join Room!");
-        //씬 로딩
-        //debugger.ShowText("");
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Ingame");
+        }
 #if UNITY_EDITOR
         //테스트 코드입니다.
         //PhotonNetwork.LoadLevel("Ingame");
@@ -157,12 +193,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 #endif
     }
 
+    /// <summary>
+    /// 방장입장에서의 다른 플레이어가 입장하면 콜백되는 메서드
+    /// </summary>
+    /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
             PhotonNetwork.LoadLevel("Ingame");
+            PhotonNetwork.CurrentRoom.RemovedFromList = true;
         }
     }
 

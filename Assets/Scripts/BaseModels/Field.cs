@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 게임플레이어가 실제 배틀을 위한 카드를 배치시키는 영역에 대한 데이터
+/// ?????????????? ???? ?????? ???? ?????? ?????????? ?????? ???? ??????
 /// </summary>
 public class Field : BaseModel
 {
-
+    public GamePlayer owner;
     public Field(GamePlayer owner)
     {
         this.owner = owner;
@@ -25,18 +25,7 @@ public class Field : BaseModel
         }
     }
     public List<Zone[]> zones;
-    private GamePlayer owner;
-
-    public class NOde
-    {
-        Card card;
-        Field.Zone myZone;
-
-        void dd()
-        {
-            
-        }
-    }
+    
 
 
     public class Zone : BaseModel
@@ -53,14 +42,14 @@ public class Field : BaseModel
         public void LocatedCard(Card card)
         {
             if (currentCard != null)
-            { Debug.Log($"이미 {currentCard}가 있습니다. 배치 불가"); }
+            { Debug.Log($"???? {currentCard}?? ????????. ???? ????"); }
             else
             {
                 currentCard = card;
                 currentCard.unitWhere = UnitWhere.Field;
-
+                card.OnFieldDraw(this);
                 GameManager.instance.events.about_Field.OnLocatedCard_At_Zone?.Invoke(card, this);
-                Debug.Log($"{card}를 {this}에 배치했습니다.");
+                Debug.Log($"{card}?? {this}?? ????????????.");
             }
         }
 
