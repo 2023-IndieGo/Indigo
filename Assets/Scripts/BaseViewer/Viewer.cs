@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Viewer: MonoBehaviour 
 {
-    public BaseModel model;
+    protected BaseModel model;
 
     public virtual void Init(BaseModel model)
     {
