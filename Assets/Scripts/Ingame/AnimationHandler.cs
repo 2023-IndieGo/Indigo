@@ -1,17 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 public class AnimationHandler : MonoBehaviour
 {
     public static int count;
+    [ShowInInspector]
     public Queue<List<AnimClip>> animationClip;
     private List<AnimClip> lastData;
 
     public void Init()
     {
+        lastData = new List<AnimClip>();
         count = 0;
         animationClip = new Queue<List<AnimClip>>();
+
     }
 
     public void Play()

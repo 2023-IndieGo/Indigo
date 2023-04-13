@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
+[System.Serializable]
 public class AnimClip
 {
     public AnimationType animType;
@@ -22,13 +23,14 @@ public class AnimClip
         {
             case AnimationType.Animation:
                 {
-                    if (animation != null)
+                    if (animation != null && animTarget != null)
                     {
+                        animTarget.AddComponent<AnimationBehaviour>();
+                        animation.legacy = true;
                         float animTime = animation.length;
                         var custom = new AnimationEvent();
                         custom.time = isEndOverTimeCustomic ? animEndedTime : animTime;
                         custom.functionName = "OnEnded";
-                        animation.legacy = true;
                         animation.AddEvent(custom);
                     }
                     break;
@@ -54,28 +56,36 @@ public class AnimClip
         {
             case AnimationType.Animation:
                 {
-            if (animation != null && animTarget != null)
-            {
-                if (animTarget.TryGetComponent<Animation>(out var comp))
-                {
-                    comp.clip = animation;
-                    comp.Play();
+                    if (animation != null && animTarget != null)
+                    {
+                        if (animTarget.TryGetComponent<Animation>(out var comp))
+                        {
+                            comp.clip = animation;
+                            comp.Play();
+                        }
+                        else
+                        {
+                            comp = animTarget.AddComponent<Animation>();
+                            {
+                                comp.clip = animation;
+                                comp.Play();
+                            }
+                        }
+                    }
+                    break;
                 }
-            }
-            break;
-        }
             case AnimationType.Particle:
                 break;
             case AnimationType.Both:
                 break;
             case AnimationType.None:
                 break;
+        }
     }
-}
 
 
-private void OnEnded()
-{
-    AnimationHandler.count++;
-}
+    public void OnEnded()
+    {
+
+    }
 }
