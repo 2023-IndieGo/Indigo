@@ -161,6 +161,13 @@ public partial class GamePlayer
     }
 
 
+    //버프/디버프 아우라 관리용 필드 레퍼런스 필요
+    //중요한 점 : 버프와 디버프는 각각 따로 별도로, 중첩될수도, 중첩안될수도
+    //각각의 버프,디버프는 별도의 클래스로 관리되어야 함
+    //그리고 그에 걸맞는 이벤트가 또 따로 필요함
+    public Dictionary<Buff, List<Buff>> BuffList;
+    public Dictionary<Debuff, List<Debuff>> DebuffList;
+
     public Field field;
     public Character character;
 }

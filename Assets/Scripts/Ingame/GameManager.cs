@@ -232,6 +232,9 @@ public class GameManager : SingletonMono<GameManager>
 
     #region Private/Protected Method
 
+    /// <summary>
+    /// 준비단계에서의 이벤트 등록
+    /// </summary>
     private void OnPrepareEventAdd()
     {
         events.about_GameManager.AddEventOnState(GameState.Prepare,

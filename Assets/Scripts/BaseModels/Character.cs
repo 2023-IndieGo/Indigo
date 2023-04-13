@@ -10,8 +10,9 @@ public partial class Character : BaseModel
 
     public string name;
 
+    /*/
     public List<Card> specialCards;
-
+    /*/
     #endregion
 
 

@@ -49,6 +49,26 @@ public enum Server_authority_Type
     Client
 }
 
+public enum AnimationType
+{
+    /// <summary>
+    /// 애니메이션
+    /// </summary>
+    Animation,
+    /// <summary>
+    /// 이펙트
+    /// </summary>
+    Particle,
+    /// <summary>
+    /// 애니메이션, 이펙트 둘다
+    /// </summary>
+    Both,
+    /// <summary>
+    /// 재생X (대기)
+    /// </summary>
+    None
+}
+
 public enum TurnType 
 { 
     Attack_Turn,

@@ -16,6 +16,8 @@ public class EventTrigger
         about_Trash = new TrashEventHandler();
         about_Hand = new HandEventHandler();
         about_Card = new CardEventHandler();
+
+        about_Aura = new BuffEventHandler();
     }
 
     /// <summary>
@@ -233,7 +235,71 @@ public class EventTrigger
         /// 플레이어의 마지막 공격턴을 또한 저장한다.
         /// </summary>
         public Del_NoRet_NoParams OnExit_BattlePhase;
+        /// <summary>
+        /// 어태커의 카드가 없을 때 발생하는 이벤트
+        /// </summary>
+        public Del_NoRet_NoParams OnAttackCard_Null;
+        /// <summary>
+        /// 디펜더의 카드가 없을 때 발생하는 이벤트
+        /// </summary>
+        public Del_NoRet_NoParams OnDefenceCard_Null;
 
+
+    }
+
+    /// <summary>
+    /// 플레이어 버프/디버프에 대한 이벤트 목록
+    /// </summary>
+    public BuffEventHandler about_Aura;
+    public class BuffEventHandler
+    {
+        public Dictionary<Buff, Del_NoRet_NoParams> OnBuff_On;
+
+        public Dictionary<Buff, Del_NoRet_NoParams> OnBuff_Off;
+
+        public Dictionary<Debuff, Del_NoRet_NoParams> OnDebuff_On;
+
+        public Dictionary<Debuff, Del_NoRet_NoParams> OnDebuff_Off;
+
+        public BuffEventHandler()
+        {
+            OnBuff_On = new Dictionary<Buff, Del_NoRet_NoParams>();
+            OnBuff_Off = new Dictionary<Buff, Del_NoRet_NoParams>();
+
+            OnDebuff_On = new Dictionary<Debuff, Del_NoRet_NoParams>();
+
+            OnDebuff_Off = new Dictionary<Debuff, Del_NoRet_NoParams>();
+        }
+
+        public void GetPlayerBuff(GamePlayer target, Buff buff_Type)
+        {
+            if(OnBuff_On.ContainsKey(buff_Type))
+            {
+                OnBuff_On.TryGetValue(buff_Type, out var value);
+                value?.Invoke();
+            }
+            else
+            {
+                OnBuff_On.Add(buff_Type, ()=>buff_Type.Init(target));
+                OnBuff_On.TryGetValue(buff_Type, out var value);
+                value?.Invoke();
+            }
+        }
+
+        public void GetPlayerDebuff(GamePlayer target, Debuff debuff_Type)
+        {
+            if (OnDebuff_On.ContainsKey(debuff_Type))
+            {
+                OnDebuff_On.TryGetValue(debuff_Type, out var value);
+                value?.Invoke();
+            }
+            else
+            {
+                OnDebuff_On.Add(debuff_Type, () => debuff_Type.Init(target));
+                OnDebuff_On.TryGetValue(debuff_Type, out var value);
+                value?.Invoke();
+            }
+        }
     }
 
 }

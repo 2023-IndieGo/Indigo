@@ -143,6 +143,27 @@ public partial class GamePlayer
     /// </summary>
     public OnValueChange<TurnType> On_TurnType_Change;
 
+    private CardType _lastOpenCardType;
+    /// <summary>
+    /// 플레이어가 가장 최근에 낸 카드의 타입
+    /// </summary>
+    public CardType lastOpenCardType
+    {
+        get => _lastOpenCardType;
+        set
+        {
+            CardType before = _lastOpenCardType;
+            _lastOpenCardType = value;
+            if(before != value)
+            {
+                On_OpenCard_LastOpenCardValueChange?.Invoke(before, value);
+            }
+        }
+    }
+    /// <summary>
+    /// 플레이어의 턴타입이 바뀌면 발동하는 이벤트 메서드
+    /// </summary>
+    public OnValueChange<CardType> On_OpenCard_LastOpenCardValueChange;
 
     #endregion
 
@@ -163,6 +184,9 @@ public partial class GamePlayer
         field = new Field(this);
         character = new Character(this);
 
+        BuffList = new Dictionary<Buff, List<Buff>>();
+        DebuffList = new Dictionary<Debuff, List<Debuff>>();
+
         //초기화 되며 필요데이터가 자동초기화
 
         Debug.Log($"플레이어 정보 생성");
@@ -176,11 +200,14 @@ public partial class GamePlayer
             //start
             () =>
             {
+                //준비단계 진입 시 카드를 덱으로부터 집습니다.
                 for (int i = 0; i < default_DrawCard_Count; i++)
                 {
                     deckData.DrawRandomCard_ToHand();
                 }
-            }
+            },
+            null,
+            OnFirstTurn_PrepareMethod
         );
     }
     #endregion
@@ -191,5 +218,27 @@ public partial class GamePlayer
 
 
     #region Private/Protected Methods
+    /// <summary>
+    /// 첫턴에, 플레이어가 카드를 내지 않는 경우에 대해서 예외처리를 합니다.
+    /// 무조건 무작위 카드가 배치되도록 설정합니다.
+    /// </summary>
+    private void OnFirstTurn_PrepareMethod()
+    {
+        //첫턴의 배틀모드 엔드 시
+        //필드 0번째가 비어있다면 무작위카드를 필드에 냅니다.
+        if (GameManager.instance.current_Turn == 0)
+        {
+            //첫턴의 첫번째 라운드의 필드가 비어있으면
+            int adress = this.current_TurnType == TurnType.Attack_Turn ? 0 : 1;
+            if(this.field.zones[0][adress].currentCard == null)
+            {
+                //핸드에서 무작위 카드를 해당필드에 냅니다.
+                int random = Random.Range(0, this.hand.cards.Count);
+                this.field.zones[0][adress].LocatedCard(this.hand.cards[random]);
+            }
+        }
+        //메서드 등록을 삭제합니다.
+        GameManager.instance.events.about_GameManager.DeleteEventOnState(GameState.Prepare, null, null, OnFirstTurn_PrepareMethod);
+    }
     #endregion
 }

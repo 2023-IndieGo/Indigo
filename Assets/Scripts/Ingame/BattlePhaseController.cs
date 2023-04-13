@@ -13,7 +13,7 @@ public class BattlePhaseController : MonoBehaviour
         Start,
         End
     }
-
+    public int currentRound = 0;
     public BattleConnecter connecter;
     public BattlePhaseState _cur_State;
     public BattlePhaseEventTrigger events;
@@ -87,14 +87,6 @@ public class BattlePhaseController : MonoBehaviour
                 value.exit -= exit;
             }
         }
-
-        /// <summary>
-        /// ???????? ??????????
-        /// </summary>
-        public void Update()
-        {
-
-        }
     }
 
     public GamePlayer myPlayer;
@@ -109,7 +101,9 @@ public class BattlePhaseController : MonoBehaviour
         StateEvents.Add(BattlePhaseState.End, new BattlePhaseEventTrigger());
     }
 
-
+    /// <summary>
+    /// 게임매니저에 이벤트 등록
+    /// </summary>
     public void Init()
     {
         //Enter GameManager=>State.battle event subscribe
@@ -118,20 +112,19 @@ public class BattlePhaseController : MonoBehaviour
             () =>
             {
                 SetBattlePhase(BattlePhaseState.Setting);
-                //BattleConnecter?????? ?????????????? ???????? ????
-                //???????????????? ???????? ?????? ???????? ?????? ???????????? ???????? ????
-                
+
             },
             //update
             () =>
             {
+
 
             },
 
             //exit
             () =>
             {
-                
+
             }
             );
 
@@ -140,21 +133,31 @@ public class BattlePhaseController : MonoBehaviour
             //start
             () =>
             {
-                myPlayer = GameManager.instance.players[0];
+                currentRound = 0;
+                otherPlayer = null;
+                myPlayer = null;
+            },
+            () =>
+            {
                 otherPlayer = connecter.GetOtherPlayer();
-                GameManager.instance.players[1] = otherPlayer;
-                if (otherPlayer != null)
+                myPlayer = connecter.GetMyPlayer();
+                if (otherPlayer != null && myPlayer != null)
                 {
                     SetBattlePhase(BattlePhaseState.Start);
                 }
-            }, 
-            () => { }, //Update
+            }, //Update
             () => { }  //Exit
             );
 
         //Enter battleState => Start
         events.AddEventOnState(BattlePhaseState.Start,
-            () => { }, //start
+            () =>
+            {
+                GameManager.instance.events.about_Battle.OnEnter_BattlePhase?.Invoke();
+                //배틀 시작
+                StartBattleMethod_Callback();
+
+            }, //start
             () => { }, //Update
             () => { }  //Exit
             );
@@ -162,7 +165,11 @@ public class BattlePhaseController : MonoBehaviour
 
         //Enter battleState => End
         events.AddEventOnState(BattlePhaseState.End,
-            () => { GameManager.instance.SetGameState(GameState.Prepare); }, //start
+            () =>
+            {
+                GameManager.instance.events.about_Battle.OnExit_BattlePhase?.Invoke();
+                GameManager.instance.SetGameState(GameState.Prepare);
+            }, //start
             () => { }, //Update
             () => { }  //Exit
             );
@@ -183,14 +190,105 @@ public class BattlePhaseController : MonoBehaviour
         _cur_State = state;
     }
 
-    public void TryBattle(Card Attacker, Card Defender)
+    public void StartBattleMethod_Callback()
+    {
+        var attackPlayer = connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn);
+        var defencePlayer = connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn);
+        int max_round = 10;
+
+        //라운드가 10라운드 이하일 때, 혹은 둘다 카드가 비어있을 때까지의 배틀 시뮬레이션
+        while (currentRound < max_round || (attackPlayer.field.zones[currentRound][0].currentCard == null && defencePlayer.field.zones[currentRound][1].currentCard == null))
+        {
+            attackPlayer = connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn);
+            defencePlayer = connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn);
+            TryBattle(attackPlayer.field.zones[currentRound][0].currentCard, defencePlayer.field.zones[currentRound][1].currentCard, out var result);
+            currentRound++;
+        }
+        //시뮬레이션 돌리기를 마치면 배틀페이즈를 종료합니다.
+        SetBattlePhase(BattlePhaseState.End);
+    }
+
+    /// <summary>
+    /// 현재 배틀은 두 플레이어 중 한쪽이라도 카드를 낸 경우에만 배틀을 시도합니다.
+    /// </summary>
+    /// <param name="Attacker"></param>
+    /// <param name="Defender"></param>
+    /// <param name="result"></param>
+    public void TryBattle(Card Attacker, Card Defender, out CardBattleResult result)
+    {
+        var AttackPlayer = connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn);
+        var DefencePlayer = connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn);
+        //각각의 플레이어로부터 최근에 낸 카드의 카드타입을 받아옵니다.
+        CardType attackerType = connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn).lastOpenCardType;
+        CardType defenderType = connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn).lastOpenCardType;
+        if (Attacker == null)
+        {
+            defenderType = Defender.type;
+            GameManager.instance.events.about_Battle.OnAttackCard_Null?.Invoke();
+
+        }
+        else if (Defender == null)
+        {
+            attackerType = Attacker.type;
+            GameManager.instance.events.about_Battle.OnDefenceCard_Null?.Invoke();
+        }
+        //둘다 카드가 있음
+        else
+        {
+            attackerType = Attacker.type;
+            defenderType = Defender.type;
+        }
+        result = GetBattleResult(attackerType, defenderType);
+        if (result == CardBattleResult.Success)
+        {
+            GameManager.instance.events.about_Battle.OnSuccessAttack(Attacker, Defender);
+            Attacker.AttackEffect(DefencePlayer, AttackPlayer);
+            Attacker.DefenceFail(AttackPlayer, DefencePlayer);
+        }
+        else
+        {
+            GameManager.instance.events.about_Battle.OnFailAttack(Attacker, Defender);
+            Attacker.AttackFail(DefencePlayer, AttackPlayer);
+            Attacker.DefenceEffect(AttackPlayer, DefencePlayer);
+            //턴타입을 바꿔줍니다.
+            connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn).current_TurnType = TurnType.Defence_Turn;
+            connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn).current_TurnType = TurnType.Attack_Turn;
+        }
+    }
+
+    public void GetNextBattleCard()
     {
 
     }
 
-    private CardBattleResult GetBattleResult_Attaker()
+    /// <summary>
+    /// 무승부도 공격 성공입니다.
+    /// </summary>
+    /// <param name="attacker"></param>
+    /// <param name="defender"></param>
+    /// <returns></returns>
+    private CardBattleResult GetBattleResult(CardType attacker, CardType defender)
     {
-        return CardBattleResult.Success;
-
+        switch (attacker)
+        {
+            case CardType.Scissors:
+                {
+                    if (defender == CardType.Paper || defender == CardType.Scissors)
+                        return CardBattleResult.Success;
+                    else return CardBattleResult.Fail;
+                }
+            case CardType.Rock:
+                {
+                    if (defender == CardType.Scissors || defender == CardType.Rock)
+                        return CardBattleResult.Success;
+                    else return CardBattleResult.Fail;
+                }
+            default:       //보
+                {
+                    if (defender == CardType.Rock || defender == CardType.Paper)
+                        return CardBattleResult.Success;
+                    else return CardBattleResult.Fail;
+                }
+        }
     }
 }

@@ -21,8 +21,8 @@ public class BattleConnecter : MonoBehaviourPun, IPunObservable
     public void Init(GamePlayer player)
     {
         if (players == null || players.Length != 2)
-        { 
-            players = new GamePlayer[2]; 
+        {
+            players = new GamePlayer[2];
         }
         int adress = isMasterClientLocal ? 0 : 1;
         players[adress] = player;
@@ -30,17 +30,50 @@ public class BattleConnecter : MonoBehaviourPun, IPunObservable
 
     public GamePlayer GetOtherPlayer()
     {
-        if(!PhotonNetwork.IsConnected)
+        if (!PhotonNetwork.IsConnected)
         {
             Debug.LogWarning("Disconnected");
             return null;
         }
-        if(GameManager.instance.server_Authority == Server_authority_Type.Host)
+        if (GameManager.instance.server_Authority == Server_authority_Type.Host)
         { return players[1]; }
         else
         {
             return players[0];
         }
+    }
+    public GamePlayer GetMyPlayer()
+    {
+        if (!PhotonNetwork.IsConnected)
+        {
+            Debug.LogWarning("Disconnected");
+            return null;
+        }
+        if (GameManager.instance.server_Authority == Server_authority_Type.Host)
+        { return players[0]; }
+        else
+        {
+            return players[1];
+        }
+    }
+
+    /// <summary>
+    /// 매개변수에 해당하는 플레이어를 받아옵니다.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public GamePlayer GetPlayer_CompareTurnType(TurnType type)
+    {
+        GamePlayer returnValue = null;
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i].current_TurnType == type)
+            {
+                returnValue = players[i];
+                break;
+            }
+        }
+        return returnValue;
     }
 
 
