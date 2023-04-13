@@ -404,6 +404,7 @@ MonoBehaviour:
   DebugerText: {fileID: 1600934192}
   debugger: {fileID: 0}
   lobby: {fileID: 293802870}
+  SceneName: EventTest
   codeText: {fileID: 49270198}
   isPrivate: {fileID: 1829718264}
   inputCode: {fileID: 885868206}

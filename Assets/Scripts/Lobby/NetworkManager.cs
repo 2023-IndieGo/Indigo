@@ -14,6 +14,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public LobbyManager lobby;
 
 
+    public string SceneName;
+
     [TitleGroup("CreateComponent")]
     [SerializeField] private Text codeText;
     [SerializeField] private Toggle isPrivate;
@@ -184,7 +186,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         debugger.ShowText($"Success Join Room!");
         if(!PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel("Ingame");
+            PhotonNetwork.LoadLevel(SceneName);
         }
 #if UNITY_EDITOR
         //테스트 코드입니다.
@@ -202,7 +204,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(newPlayer);
         if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
-            PhotonNetwork.LoadLevel("Ingame");
+            PhotonNetwork.LoadLevel(SceneName);
             PhotonNetwork.CurrentRoom.RemovedFromList = true;
         }
     }

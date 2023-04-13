@@ -140,9 +140,6 @@ public class GameManager : SingletonMono<GameManager>
     }
 
 
-
-
-
     /// <summary>
     /// 게임상태 업데이트문
     /// </summary>
@@ -159,7 +156,7 @@ public class GameManager : SingletonMono<GameManager>
         base.Awake();
         //자체변수 초기화
         //이벤트 트리거 클래스 초기화
-        events = new EventTrigger();
+        events.Init();
 
         OnPrepareEventAdd();    //이벤트 등록
 

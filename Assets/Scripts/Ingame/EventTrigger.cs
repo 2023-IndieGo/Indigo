@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 /// <summary>
 /// 게임 내의 모든 이벤트를 관리, 델리게이트를 관리합니다.
 /// 델리게이트 등록, 해제만 잘 관리해주세요.
 /// </summary>
+/// 
+[System.Serializable]
 public class EventTrigger
 {
-    public EventTrigger()
+    public void Init()
     {
         about_Battle = new BattleEventHandler();
         about_Deck = new DeckEventHandler();
@@ -19,15 +21,18 @@ public class EventTrigger
 
         about_Aura = new BuffEventHandler();
     }
-
     /// <summary>
     /// 게임매니저에 대한 이벤트 목록
     /// </summary>
+    /// 
+    [SerializeField]
     public GameManagerEventHanler about_GameManager;
+    [System.Serializable]
     public class GameManagerEventHanler
     {
         private GameState cur_GameState;
         public Dictionary<GameState, GameStateEventTrigger> StateEvents;
+        [System.Serializable]
         public class GameStateEventTrigger
         {
             public Del_NoRet_NoParams start;
@@ -120,7 +125,10 @@ public class EventTrigger
     /// <summary>
     /// 덱에 대한 이벤트 목록
     /// </summary>
+    /// 
+    [SerializeField]
     public DeckEventHandler about_Deck;
+    [System.Serializable]
     public class DeckEventHandler
     {
         /// <summary>
@@ -135,7 +143,10 @@ public class EventTrigger
     /// <summary>
     /// 플레이어 핸드에 대한 이벤트 목록
     /// </summary>
+    /// 
+    [SerializeField]
     public HandEventHandler about_Hand;
+    [System.Serializable]
     public class HandEventHandler
     {
         /// <summary>
@@ -155,7 +166,10 @@ public class EventTrigger
     /// <summary>
     /// 카드 쓰레기통에 대한 이벤트 목록
     /// </summary>
+    /// 
+    [SerializeField]
     public TrashEventHandler about_Trash;
+    [System.Serializable]
     public class TrashEventHandler
     {
         /// <summary>
@@ -176,7 +190,10 @@ public class EventTrigger
     /// <summary>
     /// 필드에 대한 이벤트 목록
     /// </summary>
+    /// 
+    [SerializeField]
     public FieldEventHanlder about_Field;
+    [System.Serializable]
     public class FieldEventHanlder
     {
         /// <summary>
@@ -200,7 +217,10 @@ public class EventTrigger
     /// <summary>
     /// 카드에 대한 이벤트 목록
     /// </summary>
+    /// 
+    [SerializeField]
     public CardEventHandler about_Card;
+    [System.Serializable]
     public class CardEventHandler
     {
 
@@ -211,7 +231,10 @@ public class EventTrigger
     /// <summary>
     /// 배틀 도중의 이벤트 목록
     /// </summary>
+    /// 
+    [SerializeField]
     public BattleEventHandler about_Battle;
+    [System.Serializable]
     public class BattleEventHandler
     {
         /// <summary>
@@ -250,7 +273,10 @@ public class EventTrigger
     /// <summary>
     /// 플레이어 버프/디버프에 대한 이벤트 목록
     /// </summary>
+    /// 
+    [SerializeField]
     public BuffEventHandler about_Aura;
+    [System.Serializable]
     public class BuffEventHandler
     {
         public Dictionary<Buff, Del_NoRet_NoParams> OnBuff_On;
@@ -301,5 +327,7 @@ public class EventTrigger
             }
         }
     }
+
+    
 
 }

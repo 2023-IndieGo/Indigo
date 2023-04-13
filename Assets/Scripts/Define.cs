@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 
 //복붙해서 쓰면
@@ -111,4 +113,26 @@ public enum ZoneType
 }
 public class Define : MonoBehaviour
 {
+}
+
+public class CustomBinaryFormatter
+{
+    public static byte[] Serialized<T>(T type)
+    {
+        var bf = new BinaryFormatter();
+        MemoryStream ms = new MemoryStream();
+        bf.Serialize(ms, type);
+        byte[] bytes = ms.ToArray();
+        ms.Close();
+        return bytes;
+    }
+
+    public static T DeserializedFromByte<T>(byte[] bytes)
+    {
+        var bf = new BinaryFormatter();
+        MemoryStream ms = new MemoryStream(bytes);
+        T data = (T)bf.Deserialize(ms);
+        ms.Close();
+        return data;
+    }
 }
