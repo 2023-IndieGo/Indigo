@@ -1,10 +1,10 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 /// <summary>
-/// °ÔÀÓ ³»ÀÇ ¸ğµç ÀÌº¥Æ®¸¦ °ü¸®, µ¨¸®°ÔÀÌÆ®¸¦ °ü¸®ÇÕ´Ï´Ù.
-/// µ¨¸®°ÔÀÌÆ® µî·Ï, ÇØÁ¦¸¸ Àß °ü¸®ÇØÁÖ¼¼¿ä.
+/// ê²Œì„ ë‚´ì˜ ëª¨ë“  ì´ë²¤íŠ¸ë¥¼ ê´€ë¦¬, ë¸ë¦¬ê²Œì´íŠ¸ë¥¼ ê´€ë¦¬í•©ë‹ˆë‹¤.
+/// ë¸ë¦¬ê²Œì´íŠ¸ ë“±ë¡, í•´ì œë§Œ ì˜ ê´€ë¦¬í•´ì£¼ì„¸ìš”.
 /// </summary>
 /// 
 [System.Serializable]
@@ -12,17 +12,12 @@ public class EventTrigger
 {
     public void Init()
     {
-        about_Battle = new BattleEventHandler();
-        about_Deck = new DeckEventHandler();
+        about_Prepare = new PrepareEventHandler();
         about_GameManager = new GameManagerEventHanler();
-        about_Trash = new TrashEventHandler();
-        about_Hand = new HandEventHandler();
-        about_Card = new CardEventHandler();
-
         about_Aura = new BuffEventHandler();
     }
     /// <summary>
-    /// °ÔÀÓ¸Å´ÏÀú¿¡ ´ëÇÑ ÀÌº¥Æ® ¸ñ·Ï
+    /// ê²Œì„ë§¤ë‹ˆì €ì— ëŒ€í•œ ì´ë²¤íŠ¸ ëª©ë¡
     /// </summary>
     /// 
     [SerializeField]
@@ -71,7 +66,7 @@ public class EventTrigger
         }
 
         /// <summary>
-        /// ÇØ´ç °ÔÀÓ½ºÅ×ÀÌÆ®¿¡ ¸Å°³º¯¼ö ¸Ş¼­µå¸¦ µî·ÏÇÕ´Ï´Ù.
+        /// í•´ë‹¹ ê²Œì„ìŠ¤í…Œì´íŠ¸ì— ë§¤ê°œë³€ìˆ˜ ë©”ì„œë“œë¥¼ ë“±ë¡í•©ë‹ˆë‹¤.
         /// </summary>
         /// <param name="targetStage"></param>
         /// <param name="start"></param>
@@ -92,7 +87,7 @@ public class EventTrigger
         }
 
         /// <summary>
-        /// ÇØ´ç °ÔÀÓ½ºÅ×ÀÌÆ®¿¡ ¸Å°³º¯¼ö ¸Ş¼­µå¸¦ Á¦°ÅÇÕ´Ï´Ù.
+        /// í•´ë‹¹ ê²Œì„ìŠ¤í…Œì´íŠ¸ì— ë§¤ê°œë³€ìˆ˜ ë©”ì„œë“œë¥¼ ì œê±°í•©ë‹ˆë‹¤.
         /// </summary>
         /// <param name="targetState"></param>
         /// <param name="start"></param>
@@ -109,7 +104,7 @@ public class EventTrigger
         }
 
         /// <summary>
-        /// °ÔÀÓ»óÅÂ ¾÷µ¥ÀÌÆ®¹®
+        /// ê²Œì„ìƒíƒœ ì—…ë°ì´íŠ¸ë¬¸
         /// </summary>
         public void Update()
         {
@@ -123,113 +118,73 @@ public class EventTrigger
 
 
     /// <summary>
-    /// µ¦¿¡ ´ëÇÑ ÀÌº¥Æ® ¸ñ·Ï
+    /// ë±ì— ëŒ€í•œ ì´ë²¤íŠ¸ ëª©ë¡
     /// </summary>
     /// 
     [SerializeField]
-    public DeckEventHandler about_Deck;
+    public PrepareEventHandler about_Prepare;
     [System.Serializable]
-    public class DeckEventHandler
+    public class PrepareEventHandler
     {
         /// <summary>
-        /// µ¦¿¡¼­ Ä«µå¸¦ »ÌÀ» ¶§ÀÇ ÀÌº¥Æ®
-        /// ex´É·Â ) µ¦¿¡¼­ Ä«µå¸¦ »ÌÀ» ¶§¸¶´Ù °ø°İ·ÂÀÌ Áõ°¡ÇÕ´Ï´Ù.
+        /// ë±ì—ì„œ ì¹´ë“œë¥¼ ë½‘ì„ ë•Œì˜ ì´ë²¤íŠ¸
+        /// exëŠ¥ë ¥ ) ë±ì—ì„œ ì¹´ë“œë¥¼ ë½‘ì„ ë•Œë§ˆë‹¤ ê³µê²©ë ¥ì´ ì¦ê°€í•©ë‹ˆë‹¤.
         /// </summary>
         public Del_NoRet_1_Params<Card> OnDrawCard_From_Deck;
 
-
-    }
-
-    /// <summary>
-    /// ÇÃ·¹ÀÌ¾î ÇÚµå¿¡ ´ëÇÑ ÀÌº¥Æ® ¸ñ·Ï
-    /// </summary>
-    /// 
-    [SerializeField]
-    public HandEventHandler about_Hand;
-    [System.Serializable]
-    public class HandEventHandler
-    {
         /// <summary>
-        /// ÇÚµå¿¡ ÀÖ´Â Ä«µå¸¦ ¹ö¸± ¶§
+        /// ë±ì— ìƒˆë¡œìš´ ì¹´ë“œë¥¼ ìƒì„± í•  ë•Œì˜ ì´ë²¤íŠ¸
         /// </summary>
-        public Del_NoRet_1_Params<Card> OnThrowCard_From_Hand;
-        /// <summary>
-        /// ÇÚµå¿¡ ÀÖ´Â Ä«µå°¡ »ç¶óÁú ¶§ (¹ö¸®´Â°Å¶û ´Ù¸§)
-        /// </summary>
-        public Del_NoRet_1_Params<Card> OnBlowCard_From_Hand;
-        /// <summary>
-        /// ÇÚµå¿¡ Ä«µå°¡ »ı±æ ¶§
-        /// </summary>
-        public Del_NoRet_1_Params<Card> OnGetCard_To_Hand;
-    }
-
-    /// <summary>
-    /// Ä«µå ¾²·¹±âÅë¿¡ ´ëÇÑ ÀÌº¥Æ® ¸ñ·Ï
-    /// </summary>
-    /// 
-    [SerializeField]
-    public TrashEventHandler about_Trash;
-    [System.Serializable]
-    public class TrashEventHandler
-    {
-        /// <summary>
-        /// ¾²·¹±âÅëÀÌ Ä«µå¸¦ ½×À» °æ¿ì
-        /// </summary>
-        public Del_NoRet_1_Params<Card> OnGetCard;
-
-
+        public Del_NoRet_1_Params<Card> OnCreateCard_OnDeck;
 
         /// <summary>
-        /// ¾²·¹±âÅëÀÌ ºñ¿öÁú °æ¿ì
+        /// ë±ì—ì„œ í•¸ë“œë¡œ ì¹´ë“œë¥¼ ê°€ì ¸ì˜¬ ë•Œì˜ ì´ë²¤íŠ¸
         /// </summary>
-        public Del_NoRet_NoParams OnClear_TrashCan;
-    }
-
-
-
-    /// <summary>
-    /// ÇÊµå¿¡ ´ëÇÑ ÀÌº¥Æ® ¸ñ·Ï
-    /// </summary>
-    /// 
-    [SerializeField]
-    public FieldEventHanlder about_Field;
-    [System.Serializable]
-    public class FieldEventHanlder
-    {
-        /// <summary>
-        /// Ä«µå¸¦ ÇØ´ç ±¸¿ª¿¡ ³¾ °æ¿ì¿¡ ¹ß»ıÇÏ´Â ÀÌº¥Æ®
-        /// </summary>
-        public Del_NoRet_2_Params<Card, Field.Zone> OnLocatedCard_At_Zone;
-        /// <summary>
-        /// ÇØ´ç±¸¿ª¿¡ ÀÖ´Â Ä«µå¸¦ ¾ø¾Ù °æ¿ì ¹ß»ıÇÏ´Â ÀÌº¥Æ®
-        /// </summary>
-        public Del_NoRet_2_Params<Card, Field.Zone> OnRemoveCard_From_Zone;
+        public Del_NoRet_1_Params<Card> OnDrawOnDeck;
 
         /// <summary>
-        /// ÇØ´ç ±¸¿ª¿¡ Æ¯Á¤ÇÑ Ä«µå°¡ »ı±æ °æ¿ì ¹ß»ıÇÏ´Â ÀÌº¥Æ® (³»´Â °ÍÀÌ¶û ´Ù¸§)
+        /// í•¸ë“œì— ìƒˆë¡œìš´ ì¹´ë“œë¥¼ ìƒì„±í•  ë•Œì˜ ì´ë²¤íŠ¸
         /// </summary>
-        public Del_NoRet_2_Params<Card, Field.Zone> OnCreateCard;
+        public Del_NoRet_1_Params<Card> OnCreateCard_OnHand;
+
+        /// <summary>
+        /// í•¸ë“œì—ì„œ í•„ë“œë¡œ ì¹´ë“œë¥¼ ë‚¼ ë•Œì˜ ì´ë²¤íŠ¸
+        /// </summary>
+        public Del_NoRet_2_Params<Card, Field.Zone> OnDrawField;
+
+        /// <summary>
+        /// í•¸ë“œì—ì„œ ì“°ë ˆê¸°í†µìœ¼ë¡œ ì¹´ë“œë¥¼ ë²„ë¦´ ë•Œì˜ ì´ë²¤íŠ¸
+        /// </summary>
+        public Del_NoRet_1_Params<Card> OnThrowAwayFromHand;
+
+        /// <summary>
+        /// í•„ë“œì—ì„œ ì“°ë ˆê¸°í†µìœ¼ë¡œ ì¹´ë“œë¥¼ ë²„ë¦´ ë•Œì˜ ì´ë²¤íŠ¸
+        /// </summary>
+        public Del_NoRet_1_Params<Card> OnThrowAwayFromField;
+
+        /// <summary>
+        /// ì¹´ë“œê°€ ì™„ì „íˆ ê²Œì„ì—ì„œ ì‚¬ë¼ì§ˆ ë•Œì˜ ì´ë²¤íŠ¸
+        /// </summary>
+        public Del_NoRet_1_Params<Card> OnCardOutofTheGame;
+
+        /// <summary>
+        /// ì“°ë ˆê¸°í†µìœ¼ë¡œë¶€í„° ì¹´ë“œë¥¼ ë±ìœ¼ë¡œ ë‹¤ì‹œ ë„£ì„ ë•Œ
+        /// </summary>
+        public Del_NoRet_1_Params<Card> OnGetCardToDeck_FromTrash;
+
+        /// <summary>
+        /// ì“°ë ˆê¸°í†µìœ¼ë¡œë¶€í„° ì¹´ë“œë¥¼ í•¸ë“œë¡œ ë‹¤ì‹œ ë„£ì„ ë•Œ
+        /// </summary>
+        public Del_NoRet_1_Params<Card> OnGetCardToHand_FromTrash;
+
 
 
     }
 
 
-    /// <summary>
-    /// Ä«µå¿¡ ´ëÇÑ ÀÌº¥Æ® ¸ñ·Ï
-    /// </summary>
-    /// 
-    [SerializeField]
-    public CardEventHandler about_Card;
-    [System.Serializable]
-    public class CardEventHandler
-    {
-
-    
-    }
-
 
     /// <summary>
-    /// ¹èÆ² µµÁßÀÇ ÀÌº¥Æ® ¸ñ·Ï
+    /// ë°°í‹€ ë„ì¤‘ì˜ ì´ë²¤íŠ¸ ëª©ë¡
     /// </summary>
     /// 
     [SerializeField]
@@ -238,40 +193,38 @@ public class EventTrigger
     public class BattleEventHandler
     {
         /// <summary>
-        /// ¹èµéÆäÀÌÁî¿¡ ÁøÀÔ ½Ã Ãß°¡ÀûÀ¸·Î ¹ß»ıÇÏ´Â ÀÌº¥Æ® : ¿¹´Â ±â¼±Á¦¾Ğ
+        /// ë°°ë“¤í˜ì´ì¦ˆì— ì§„ì… ì‹œ ì¶”ê°€ì ìœ¼ë¡œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸ : ì˜ˆëŠ” ê¸°ì„ ì œì••
         /// </summary>
         public Del_NoRet_NoParams OnEnter_BattlePhase;
         /// <summary>
-        /// °ø°İÀÚÀÇ ¹æ¾îÄ«µå¿¡ ´ëÇØ °ø°İ ½ÇÇà, ¹æ¾îÀÚ´Â nuilÀÌ µÉ¼öµµ ÀÖÀ½.
+        /// ê³µê²©ìì˜ ë°©ì–´ì¹´ë“œì— ëŒ€í•´ ê³µê²© ì‹¤í–‰, ë°©ì–´ìëŠ” nuilì´ ë ìˆ˜ë„ ìˆìŒ.
         /// </summary>
         public Del_NoRet_2_Params<Card, Card> OnTry_Attack_Card;
         /// <summary>
-        /// °ø°İÀÌ ¼º°øÇÑ °æ¿ìÀÇ ÀÌº¥Æ® (°ø°İÅÏÀ» Áö¼ÓÀûÀ¸·Î °¡Á®¿Â´Ù)
+        /// ê³µê²©ì´ ì„±ê³µí•œ ê²½ìš°ì˜ ì´ë²¤íŠ¸ (ê³µê²©í„´ì„ ì§€ì†ì ìœ¼ë¡œ ê°€ì ¸ì˜¨ë‹¤)
         /// </summary>
         public Del_NoRet_2_Params<Card, Card> OnSuccessAttack;
         /// <summary>
-        /// °ø°İÀÌ ½ÇÆĞÇÑ °æ¿ìÀÇ ÀÌº¥Æ® (°ø°İÅÏÀ» »©¾Ñ±ä´Ù)
+        /// ê³µê²©ì´ ì‹¤íŒ¨í•œ ê²½ìš°ì˜ ì´ë²¤íŠ¸ (ê³µê²©í„´ì„ ë¹¼ì•—ê¸´ë‹¤)
         /// </summary>
         public Del_NoRet_2_Params<Card, Card> OnFailAttack;
         /// <summary>
-        /// ¹èÆ²ÀÌ Á¾·áµÈ µÚ °ÔÀÓ ½ºÅ×ÀÌÁî°¡ º¯°æµÇ±â Àü ¹ß»ıÇÏ´Â ÀÌº¥Æ®
-        /// ÇÃ·¹ÀÌ¾îÀÇ ¸¶Áö¸· °ø°İÅÏÀ» ¶ÇÇÑ ÀúÀåÇÑ´Ù.
+        /// ë°°í‹€ì´ ì¢…ë£Œëœ ë’¤ ê²Œì„ ìŠ¤í…Œì´ì¦ˆê°€ ë³€ê²½ë˜ê¸° ì „ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
+        /// í”Œë ˆì´ì–´ì˜ ë§ˆì§€ë§‰ ê³µê²©í„´ì„ ë˜í•œ ì €ì¥í•œë‹¤.
         /// </summary>
         public Del_NoRet_NoParams OnExit_BattlePhase;
         /// <summary>
-        /// ¾îÅÂÄ¿ÀÇ Ä«µå°¡ ¾øÀ» ¶§ ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+        /// ì–´íƒœì»¤ì˜ ì¹´ë“œê°€ ì—†ì„ ë•Œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
         /// </summary>
         public Del_NoRet_NoParams OnAttackCard_Null;
         /// <summary>
-        /// µğÆæ´õÀÇ Ä«µå°¡ ¾øÀ» ¶§ ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+        /// ë””íœë”ì˜ ì¹´ë“œê°€ ì—†ì„ ë•Œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
         /// </summary>
         public Del_NoRet_NoParams OnDefenceCard_Null;
-
-
     }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î ¹öÇÁ/µğ¹öÇÁ¿¡ ´ëÇÑ ÀÌº¥Æ® ¸ñ·Ï
+    /// í”Œë ˆì´ì–´ ë²„í”„/ë””ë²„í”„ì— ëŒ€í•œ ì´ë²¤íŠ¸ ëª©ë¡
     /// </summary>
     /// 
     [SerializeField]

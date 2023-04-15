@@ -5,7 +5,7 @@ using Photon.Realtime;
 using Sirenix.OdinInspector;
 
 /// <summary>
-/// 배틀페이즈 진입 시 플레이어의 필드 데이터를 업데이트합니다.
+/// 배틀페이즈 진입 시 플레이어의 필드 데이터와 각 플레이어의 이벤트핸들러 중 배틀이벤트 핸들러를 업데이트합니다.
 /// </summary>
 public class BattleConnecter : MonoBehaviourPun, IPunObservable
 {

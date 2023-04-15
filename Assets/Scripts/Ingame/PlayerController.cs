@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,11 +6,11 @@ public class PlayerController : MonoBehaviour
 {
     
 
-    //UI±â¹İÀ¸·Î µ¿ÀÛÇÒ °æ¿ì ÇØ´ç½ºÅ©¸³Æ® ÅëÃ¤·Î ÇÊ¿ä¾øÀ» °ÍÀ¸·Î ¿¹»óµÊ
-    //Âü°í·Î UI±â¹İÀº µå·Î¿ìÄİÀÌ Á» ÀÖÀ» ¼ö ÀÖÀ½
+    //UIê¸°ë°˜ìœ¼ë¡œ ë™ì‘í•  ê²½ìš° í•´ë‹¹ìŠ¤í¬ë¦½íŠ¸ í†µì±„ë¡œ í•„ìš”ì—†ì„ ê²ƒìœ¼ë¡œ ì˜ˆìƒë¨
+    //ì°¸ê³ ë¡œ UIê¸°ë°˜ì€ ë“œë¡œìš°ì½œì´ ì¢€ ìˆì„ ìˆ˜ ìˆìŒ
     void Update()
     {
-        // ¸¶¿ì½º À§Ä¡¸¦ ±âÁØÀ¸·Î ·¹ÀÌ »ı¼º
+        // ë§ˆìš°ìŠ¤ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë ˆì´ ìƒì„±
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -37,10 +37,10 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        // ·¹ÀÌÄ³½ºÆÃÀ» ¼öÇàÇÏ°í, Ãæµ¹ÇÑ °´Ã¼ Á¤º¸¸¦ hit º¯¼ö¿¡ ÀúÀå
+        // ë ˆì´ìºìŠ¤íŒ…ì„ ìˆ˜í–‰í•˜ê³ , ì¶©ëŒí•œ ê°ì²´ ì •ë³´ë¥¼ hit ë³€ìˆ˜ì— ì €ì¥
         if (Physics.Raycast(ray, out hit))
         {
-            // Ãæµ¹ÇÑ °´Ã¼ÀÇ Á¤º¸ Ãâ·Â
+            // ì¶©ëŒí•œ ê°ì²´ì˜ ì •ë³´ ì¶œë ¥
             Debug.Log("Hit object: " + hit.transform.name);
             if (hit.collider.TryGetComponent<Viewer>(out var comp))
             {

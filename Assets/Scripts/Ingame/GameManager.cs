@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -6,9 +6,9 @@ using Sirenix.OdinInspector;
 
 
 /// <summary>
-/// ÀÎ°ÔÀÓ»óÅÂ¿¡¼­¸¸ »õ·Î »ı¼º ÈÄ ÃÊ±âÈ­(Init())µÇµµ·Ï
-/// ÀÎ°ÔÀÓÀÌ Á¾·áµÇ¸é GameManager
-/// null·Î ¹Ù²Ù°í ÀÌº¥Æ®¸¦ ¸ğµÎ ³¯·Á¾ßÇÔ.
+/// ì¸ê²Œì„ìƒíƒœì—ì„œë§Œ ìƒˆë¡œ ìƒì„± í›„ ì´ˆê¸°í™”(Init())ë˜ë„ë¡
+/// ì¸ê²Œì„ì´ ì¢…ë£Œë˜ë©´ GameManager
+/// nullë¡œ ë°”ê¾¸ê³  ì´ë²¤íŠ¸ë¥¼ ëª¨ë‘ ë‚ ë ¤ì•¼í•¨.
 /// </summary>
 public class GameManager : SingletonMono<GameManager>
 {
@@ -21,10 +21,10 @@ public class GameManager : SingletonMono<GameManager>
     public Server_authority_Type server_Authority { get; private set; }
 
 
-    [ShowInInspector, LabelText("°ÔÀÓ »óÅÂ")]
+    [ShowInInspector, LabelText("ê²Œì„ ìƒíƒœ")]
     private GameState _cur_GameState;
     /// <summary>
-    /// ÇöÀç °ÔÀÓÀÇ »óÅÂÀÔ´Ï´Ù.
+    /// í˜„ì¬ ê²Œì„ì˜ ìƒíƒœì…ë‹ˆë‹¤.
     /// </summary>
     public GameState cur_GameState
     {
@@ -33,39 +33,39 @@ public class GameManager : SingletonMono<GameManager>
 
 
     /// <summary>
-    /// ÁØºñ´Ü°èÀÇ ÁøÇàµÇ°í ÀÖ´Â ÇöÀç½Ã°£ÀÔ´Ï´Ù.
+    /// ì¤€ë¹„ë‹¨ê³„ì˜ ì§„í–‰ë˜ê³  ìˆëŠ” í˜„ì¬ì‹œê°„ì…ë‹ˆë‹¤.
     /// </summary>
-    [LabelText("ÅÏ Á¾·á±îÁöÀÇ ½Ã°£")]
+    [LabelText("í„´ ì¢…ë£Œê¹Œì§€ì˜ ì‹œê°„")]
     public float prepare_CurTime;
 
     /// <summary>
-    /// ÁØºñ´Ü°è ÁøÀÔ ½Ã °¢ ÅÏ¸¶´ÙÀÇ ÁÖ¾îÁö´Â ½Ã°£ÀÔ´Ï´Ù.
+    /// ì¤€ë¹„ë‹¨ê³„ ì§„ì… ì‹œ ê° í„´ë§ˆë‹¤ì˜ ì£¼ì–´ì§€ëŠ” ì‹œê°„ì…ë‹ˆë‹¤.
     /// </summary>
-    [ShowInInspector, LabelText("ÁÖ¾îÁø ÁØºñ½Ã°£"), ReadOnly]
+    [ShowInInspector, LabelText("ì£¼ì–´ì§„ ì¤€ë¹„ì‹œê°„"), ReadOnly]
     public float _prepare_maxTime => default_PrepareTime * prepareTime_IncreaseRate * current_Turn;
 
     private float _default_PrepareTime;
     /// <summary>
-    /// ±âº» ÁØºñ´Ü°è ½Ã°£ÀÔ´Ï´Ù.
+    /// ê¸°ë³¸ ì¤€ë¹„ë‹¨ê³„ ì‹œê°„ì…ë‹ˆë‹¤.
     /// </summary>
     public float default_PrepareTime = 30;
 
     private float _prepareTime_IncreaseRate = 1.1f;
     /// <summary>
-    /// ¸Å ÅÏ¸¶´ÙÀÇ ÁØºñ½Ã°£ Áõ°¡ºñÀ²ÀÔ´Ï´Ù.
+    /// ë§¤ í„´ë§ˆë‹¤ì˜ ì¤€ë¹„ì‹œê°„ ì¦ê°€ë¹„ìœ¨ì…ë‹ˆë‹¤.
     /// </summary>
     public float prepareTime_IncreaseRate;
 
-    [ShowInInspector, LabelText("ÇöÀç ÅÏ ¼ö")]
+    [ShowInInspector, LabelText("í˜„ì¬ í„´ ìˆ˜")]
     private uint _current_Turn = 0;
     /// <summary>
-    /// ÇöÀç ÅÏÀÌ ¸î ÅÏÀÎÁö ¾Ë·ÁÁÖ´Â ÇÊµåº¯¼öÀÔ´Ï´Ù.
+    /// í˜„ì¬ í„´ì´ ëª‡ í„´ì¸ì§€ ì•Œë ¤ì£¼ëŠ” í•„ë“œë³€ìˆ˜ì…ë‹ˆë‹¤.
     /// </summary>
     public uint current_Turn => _current_Turn;
 
-    [ShowInInspector, LabelText("ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ")]
+    [ShowInInspector, LabelText("í”Œë ˆì´ì–´ ë°ì´í„°")]
     /// <summary>
-    /// ÇöÀç °ÔÀÓÀÇ ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ ¹è¿­ÀÔ´Ï´Ù. [0] = ³ª, [1] = »ó´ë¹æ
+    /// í˜„ì¬ ê²Œì„ì˜ í”Œë ˆì´ì–´ ë°ì´í„° ë°°ì—´ì…ë‹ˆë‹¤. [0] = ë‚˜, [1] = ìƒëŒ€ë°©
     /// </summary>
     public GamePlayer[] players = new GamePlayer[2];
     #endregion
@@ -129,8 +129,8 @@ public class GameManager : SingletonMono<GameManager>
 
     }
     /// <summary>
-    /// °ÔÀÓÀÇ »óÅÂ¸¦ º¯°æÇÕ´Ï´Ù.
-    /// º¯°æµÈ »óÅÂ¿¡ µû¸¥ ÀÌº¥Æ®°¡ ½ÇÇàµË´Ï´Ù.
+    /// ê²Œì„ì˜ ìƒíƒœë¥¼ ë³€ê²½í•©ë‹ˆë‹¤.
+    /// ë³€ê²½ëœ ìƒíƒœì— ë”°ë¥¸ ì´ë²¤íŠ¸ê°€ ì‹¤í–‰ë©ë‹ˆë‹¤.
     /// </summary>
     /// <param name="targetState"></param>
     public void SetGameState(GameState targetState)
@@ -141,7 +141,7 @@ public class GameManager : SingletonMono<GameManager>
 
 
     /// <summary>
-    /// °ÔÀÓ»óÅÂ ¾÷µ¥ÀÌÆ®¹®
+    /// ê²Œì„ìƒíƒœ ì—…ë°ì´íŠ¸ë¬¸
     /// </summary>
     public void Update()
     {
@@ -154,30 +154,30 @@ public class GameManager : SingletonMono<GameManager>
     protected override void Awake()
     {
         base.Awake();
-        //ÀÚÃ¼º¯¼ö ÃÊ±âÈ­
-        //ÀÌº¥Æ® Æ®¸®°Å Å¬·¡½º ÃÊ±âÈ­
+        //ìì²´ë³€ìˆ˜ ì´ˆê¸°í™”
+        //ì´ë²¤íŠ¸ íŠ¸ë¦¬ê±° í´ë˜ìŠ¤ ì´ˆê¸°í™”
         events.Init();
 
-        OnPrepareEventAdd();    //ÀÌº¥Æ® µî·Ï
+        OnPrepareEventAdd();    //ì´ë²¤íŠ¸ ë“±ë¡
 
 
-        //°ÔÀÓÇÃ·¹ÀÌ ÁØºñ »çÀüÅ×½ºÆ®
-        //°ÔÀÓÀ» ¸ÕÀú ¼¼ÆÃÇÏ´Â ´Ü°è (ÇÊ¿äÇÑ µ¥ÀÌÅÍ ¹Ş¾Æ¿À±â ´Ü°è)
+        //ê²Œì„í”Œë ˆì´ ì¤€ë¹„ ì‚¬ì „í…ŒìŠ¤íŠ¸
+        //ê²Œì„ì„ ë¨¼ì € ì„¸íŒ…í•˜ëŠ” ë‹¨ê³„ (í•„ìš”í•œ ë°ì´í„° ë°›ì•„ì˜¤ê¸° ë‹¨ê³„)
         SetGameState(GameState.Setting_Game);
-        //ÀÚ±â ÇÃ·¹ÀÌ¾îÀÇ µ¥ÀÌÅÍ¸¦ °¡Á®¿É´Ï´Ù.
+        //ìê¸° í”Œë ˆì´ì–´ì˜ ë°ì´í„°ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
         GetPlayerData();
     }
 
 
     private void GetPlayerData()
     {
-        //GamePlayer¸¦ »õ·Î »ı¼ºÇÏ¿© 
-        //ÀÚ½Å ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ¸¦ ±â¹İÀ¸·Î GamePlayer ÃÊ±âÈ­ ¹×
-        //players[0]¿¡ ÇÒ´ç
+        //GamePlayerë¥¼ ìƒˆë¡œ ìƒì„±í•˜ì—¬ 
+        //ìì‹  í”Œë ˆì´ì–´ ë°ì´í„°ë¥¼ ê¸°ë°˜ìœ¼ë¡œ GamePlayer ì´ˆê¸°í™” ë°
+        //players[0]ì— í• ë‹¹
         GamePlayer pl = new GamePlayer();
         pl.Init();
         battleConnecter.Init(pl);
-        //·ÎÄÃ ÇÃ·¹ÀÌ¾îÀÇ µ¥ÀÌÅÍ¸¦ °ÔÀÓ¸Å´ÏÀúÀÇ ÇÃ·¹ÀÌ¾î 0¹ø¿¡ µî·Ï
+        //ë¡œì»¬ í”Œë ˆì´ì–´ì˜ ë°ì´í„°ë¥¼ ê²Œì„ë§¤ë‹ˆì €ì˜ í”Œë ˆì´ì–´ 0ë²ˆì— ë“±ë¡
         players[0] = pl;
         int insertAdress = isConnectedClientMaster ? 0 : 1;
         GamePlayer secPl = battleConnecter.players[insertAdress];
@@ -186,40 +186,40 @@ public class GameManager : SingletonMono<GameManager>
         players[0].current_TurnType = TurnType.Attack_Turn;
 
         
-        //»ó´ë ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ¸¦ °¡Á®¿À±â¸¦ ½Ãµµ.
-        //³»ºÎ ºñµ¿±â ÄÚ·çÆ¾À¸·Î »ó´ë ÇÃ·¹ÀÌ¾î Á¤º¸¸¦ Áö¼ÓÀûÀ¸·Î °¡Á®¿À±â¸¦ ½Ãµµ,
+        //ìƒëŒ€ í”Œë ˆì´ì–´ ë°ì´í„°ë¥¼ ê°€ì ¸ì˜¤ê¸°ë¥¼ ì‹œë„.
+        //ë‚´ë¶€ ë¹„ë™ê¸° ì½”ë£¨í‹´ìœ¼ë¡œ ìƒëŒ€ í”Œë ˆì´ì–´ ì •ë³´ë¥¼ ì§€ì†ì ìœ¼ë¡œ ê°€ì ¸ì˜¤ê¸°ë¥¼ ì‹œë„,
         StartCoroutine(TryGetOtherPlayerInfo());
         IEnumerator TryGetOtherPlayerInfo()
         {
             float maxWaitTime = 5;
             float currentTime = 0;
-            //ÀÏÁ¤ ½Ã°£ÀÌ Áö³¯¶§±îÁö, È¤Àº ÇÃ·¹ÀÌ¾î Á¤º¸°¡ nullÀÌ ¾Æ´Ò¶§±îÁö
+            //ì¼ì • ì‹œê°„ì´ ì§€ë‚ ë•Œê¹Œì§€, í˜¹ì€ í”Œë ˆì´ì–´ ì •ë³´ê°€ nullì´ ì•„ë‹ë•Œê¹Œì§€
             while (currentTime >= maxWaitTime || secPl == null)
             {
-                //»ó´ëÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ ¹Ş¾Æ¿À±â ½Ãµµ => Æ÷Åæ³İ¿öÅ©
+                //ìƒëŒ€í”Œë ˆì´ì–´ ë°ì´í„° ë°›ì•„ì˜¤ê¸° ì‹œë„ => í¬í†¤ë„·ì›Œí¬
                 secPl = battleConnecter.players[insertAdress];
                 currentTime += Time.deltaTime;
                 yield return null;
             }
-            //¼º°ø ½Ã 
-            //players[1]¿¡ ÇÒ´ç
+            //ì„±ê³µ ì‹œ 
+            //players[1]ì— í• ë‹¹
             if (secPl != null)
             {
                 players[insertAdress] = secPl;
                 secPl.current_TurnType = TurnType.Defence_Turn;
 
-                //¼­¹ö¿¡ ´ëÇÑ È£½ºÆ®/Å¬¶ó ¿©ºÎ¸¦ °ÔÀÓ¸Å´ÏÀú º¯¼ö
+                //ì„œë²„ì— ëŒ€í•œ í˜¸ìŠ¤íŠ¸/í´ë¼ ì—¬ë¶€ë¥¼ ê²Œì„ë§¤ë‹ˆì € ë³€ìˆ˜
                 server_Authority = isConnectedClientMaster ? Server_authority_Type.Host : Server_authority_Type.Client;
-                //¿¡ ÇÒ´ç
-                //°ÔÀÓ ½ºÅ×ÀÌÆ® ÀÌÁ¦ ½ºÅ¸Æ®·Î º¯°æ
+                //ì— í• ë‹¹
+                //ê²Œì„ ìŠ¤í…Œì´íŠ¸ ì´ì œ ìŠ¤íƒ€íŠ¸ë¡œ ë³€ê²½
                 SetGameState(GameState.Start);
             }
-            //Á¢¼Ó½ÇÆĞ
+            //ì ‘ì†ì‹¤íŒ¨
             else
             {
-                //½ÇÆĞ ½Ã ¼­¹ö Á¢¼ÓÀÌ ½ÇÆĞµÊ (³×Æ®¿öÅ· ¸Å´ÏÀú¿¡°Ô ÃßÈÄ ÀÌÀüµÉ µ¿ÀÛ)
-                Debug.Log($"GamePlayerData¸¦ ¾ò¾î¿ÀÁö ¸øÇß½À´Ï´Ù.");
-                //ÀÚµ¿À¸·Î ·Îºñ·Î µ¹¾Æ°¡±â
+                //ì‹¤íŒ¨ ì‹œ ì„œë²„ ì ‘ì†ì´ ì‹¤íŒ¨ë¨ (ë„¤íŠ¸ì›Œí‚¹ ë§¤ë‹ˆì €ì—ê²Œ ì¶”í›„ ì´ì „ë  ë™ì‘)
+                Debug.Log($"GamePlayerDataë¥¼ ì–»ì–´ì˜¤ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
+                //ìë™ìœ¼ë¡œ ë¡œë¹„ë¡œ ëŒì•„ê°€ê¸°
             }
             
         }
@@ -230,7 +230,7 @@ public class GameManager : SingletonMono<GameManager>
     #region Private/Protected Method
 
     /// <summary>
-    /// ÁØºñ´Ü°è¿¡¼­ÀÇ ÀÌº¥Æ® µî·Ï
+    /// ì¤€ë¹„ë‹¨ê³„ì—ì„œì˜ ì´ë²¤íŠ¸ ë“±ë¡
     /// </summary>
     private void OnPrepareEventAdd()
     {

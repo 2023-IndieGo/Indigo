@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ public class SingletonMono<T> : MonoBehaviour where T : SingletonMono<T>
     public static T instance { get { if (m_instance == null) m_instance = FindObjectOfType<T>(); return m_instance; } }
 
     /// <summary>
-    /// DonDestroyOnLoad´Â ÇØ´ç ¸Ş¼­µå¸¦ ÀçÁ¤ÀÇ ÈÄ Ãß°¡ÇØÁÖ¼¼¿ä.
+    /// DonDestroyOnLoadëŠ” í•´ë‹¹ ë©”ì„œë“œë¥¼ ì¬ì •ì˜ í›„ ì¶”ê°€í•´ì£¼ì„¸ìš”.
     /// </summary>
     protected virtual void Awake()
     {
@@ -31,13 +31,13 @@ public class SingleTone<T> where T : class, new()
     {
         get
         {
-            // ¸¸¾à instance°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì »õ·Î »ı¼ºÇÑ´Ù.
+            // ë§Œì•½ instanceê°€ ì¡´ì¬í•˜ì§€ ì•Šì„ ê²½ìš° ìƒˆë¡œ ìƒì„±í•œë‹¤.
             if (_instance == null)
             {
                 _instance = new T();
 
             }
-            // _instance¸¦ ¹İÈ¯ÇÑ´Ù.
+            // _instanceë¥¼ ë°˜í™˜í•œë‹¤.
             return _instance;
         }
     }

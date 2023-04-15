@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 
-//º¹ºÙÇØ¼­ ¾²¸é
+//ë³µë¶™í•´ì„œ ì“°ë©´
 #region Field
 #endregion
 
@@ -29,12 +29,12 @@ using System.IO;
 
 #region Private/Protected Methods
 #endregion
-//½ºÅ©¸³Æ®°¡ ±ò²ûÇØÁ®¿ä *^^*
+//ìŠ¤í¬ë¦½íŠ¸ê°€ ê¹”ë”í•´ì ¸ìš” *^^*
 
 
 
 /// <summary>
-/// °ªÀÌ º¯È­ÇÒ °æ¿ì ½ÇÇàµÇ´Â µ¨¸®°ÔÀÌÆ® ¸Ş¼­µå
+/// ê°’ì´ ë³€í™”í•  ê²½ìš° ì‹¤í–‰ë˜ëŠ” ë¸ë¦¬ê²Œì´íŠ¸ ë©”ì„œë“œ
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <param name="before"></param>
@@ -54,19 +54,19 @@ public enum Server_authority_Type
 public enum AnimationType
 {
     /// <summary>
-    /// ¾Ö´Ï¸ŞÀÌ¼Ç
+    /// ì• ë‹ˆë©”ì´ì…˜
     /// </summary>
     Animation,
     /// <summary>
-    /// ÀÌÆåÆ®
+    /// ì´í™íŠ¸
     /// </summary>
     Particle,
     /// <summary>
-    /// ¾Ö´Ï¸ŞÀÌ¼Ç, ÀÌÆåÆ® µÑ´Ù
+    /// ì• ë‹ˆë©”ì´ì…˜, ì´í™íŠ¸ ë‘˜ë‹¤
     /// </summary>
     Both,
     /// <summary>
-    /// Àç»ıX (´ë±â)
+    /// ì¬ìƒX (ëŒ€ê¸°)
     /// </summary>
     None
 }

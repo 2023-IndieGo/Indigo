@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,13 +6,13 @@ using Sirenix.OdinInspector;
 
 public class LobbyManager : MonoBehaviour
 {
-    [TitleGroup("UIø¿∫Í¡ß∆Æ")]
+    [TitleGroup("UIÏò§Î∏åÏ†ùÌä∏")]
     public GameObject CreatUI;
     public GameObject JoinUI;
     public GameObject RandomJoinUI;
     public GameObject HowToPlayUI;
 
-    [TitleGroup("πˆ∆∞µÈ")]
+    [TitleGroup("Î≤ÑÌäºÎì§")]
     public Button CreateBtn;
     public Button JoinBtn;
 

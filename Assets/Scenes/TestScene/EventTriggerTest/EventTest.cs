@@ -17,7 +17,7 @@ namespace TestCode.Moru
 
         public void Adding()
         {
-            trigger.about_Trash.OnClear_TrashCan += () => Debug.LogError("이벤트 추가");
+            trigger.about_Prepare.OnDrawOnDeck += (test) => Debug.LogError("이벤트 추가");
         }
 
         public void Debugging()
@@ -27,7 +27,7 @@ namespace TestCode.Moru
                 var trg = CustomBinaryFormatter.Serialized<EventTrigger>(trigger);
                 photonView.RPC("SetEvent", RpcTarget.All, trg);
             }
-            trigger.about_Trash.OnClear_TrashCan?.Invoke();
+            trigger.about_Prepare.OnDrawOnDeck?.Invoke(null);
         }
 
         [PunRPC]
@@ -40,7 +40,7 @@ namespace TestCode.Moru
         // 플레이어들이 trigger 값을 변경할 수 있는 메소드
         public void SetAboutTrashEvent()
         {
-            trigger.about_Trash.OnClear_TrashCan += () => Debug.LogError("난 다른플레이어");
+            trigger.about_Prepare.OnDrawOnDeck += (test) => Debug.LogError("난 다른플레이어");
             if (!PhotonNetwork.IsMasterClient)
             {
                 var trg = CustomBinaryFormatter.Serialized<EventTrigger>(trigger);

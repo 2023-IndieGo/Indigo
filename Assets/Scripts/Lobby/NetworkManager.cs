@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -37,45 +37,45 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         debugger.ShowText("Game Initialized...Try Connecting");
         lobby.SetInit(false);
 
-        //¸¶½ºÅÍ¼­¹ö Á¶ÀÎ
+        //ë§ˆìŠ¤í„°ì„œë²„ ì¡°ì¸
         PhotonNetwork.GameVersion = gameVersion;
         PhotonNetwork.ConnectUsingSettings();
 
-        //Á¢¼Ó Áß È¤Àº ½ÇÆĞ
+        //ì ‘ì† ì¤‘ í˜¹ì€ ì‹¤íŒ¨
 
-        // -> ¿ÏÀü Á¢¼ÓµÈ ÈÄÀÇ Ã³¸®
+        // -> ì™„ì „ ì ‘ì†ëœ í›„ì˜ ì²˜ë¦¬
 
 
     }
 
     /// <summary>
-    /// ¸¶½ºÅÍ¼­¹ö¿¡ ¿¬°áµÇ¸é ½ÇÇàµÇ´Â Äİ¹é
+    /// ë§ˆìŠ¤í„°ì„œë²„ì— ì—°ê²°ë˜ë©´ ì‹¤í–‰ë˜ëŠ” ì½œë°±
     /// </summary>
     public override void OnConnectedToMaster()
     {
 
         base.OnConnectedToMaster();
-        //¸¶½ºÅÍ ¼­¹ö¿¡ Á¤»óÀûÀ¸·Î Á¢¼ÓµÇ¸é ÀÚµ¿Äİ¹é
+        //ë§ˆìŠ¤í„° ì„œë²„ì— ì •ìƒì ìœ¼ë¡œ ì ‘ì†ë˜ë©´ ìë™ì½œë°±
         debugger.ShowText("Connected!");
         lobby.SetInit(true);
     }
 
     /// <summary>
-    /// ¿¬°áÀÌ ²÷±â¸é ½ÇÇàµÇ´Â Äİ¹é
+    /// ì—°ê²°ì´ ëŠê¸°ë©´ ì‹¤í–‰ë˜ëŠ” ì½œë°±
     /// </summary>
     /// <param name="cause"></param>
     public override void OnDisconnected(DisconnectCause cause)
     {
         base.OnDisconnected(cause);
-        //¿¬°á ²÷±è (¸Å°³º¯¼ö : ²÷±ä »çÀ¯)
+        //ì—°ê²° ëŠê¹€ (ë§¤ê°œë³€ìˆ˜ : ëŠê¸´ ì‚¬ìœ )
         lobby.SetInit(false);
         debugger.ShowText($"Server Disconnect : {cause}. Try Connecting");
-        //ÀçÁ¢¼Ó ½Ãµµ
+        //ì¬ì ‘ì† ì‹œë„
         PhotonNetwork.ConnectUsingSettings();
     }
 
     /// <summary>
-    /// ¹æ¸¸µé±â Ä¿½ºÅÒ¸Ş¼­µå
+    /// ë°©ë§Œë“¤ê¸° ì»¤ìŠ¤í…€ë©”ì„œë“œ
     /// </summary>
     public void CreateRoom()
     {
@@ -90,7 +90,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// ·ë ¼³Á¤ : private?public
+    /// ë£¸ ì„¤ì • : private?public
     /// value : true : private // false : public
     /// </summary>
     /// <param name="value"></param>
@@ -100,7 +100,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// ¹æÀ» »ı¼ºÇÏ°Ô µÇ¸é Äİ¹éµÇ´Â ¸Ş¼­µå
+    /// ë°©ì„ ìƒì„±í•˜ê²Œ ë˜ë©´ ì½œë°±ë˜ëŠ” ë©”ì„œë“œ
     /// </summary>
     public override void OnCreatedRoom()
     {
@@ -127,15 +127,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
 
-    //Join½Ã ¸ÅÄ¡¸ÅÀÌÅ·¼­¹ö·ÎºÎÅÍ Á¢¼Ó ½Ãµµ,
+    //Joinì‹œ ë§¤ì¹˜ë§¤ì´í‚¹ì„œë²„ë¡œë¶€í„° ì ‘ì† ì‹œë„,
     public void Connect()
     {
-        //Áßº¹Á¢¼Ó ¾ÈµÇµµ·Ï Ã³¸®
+        //ì¤‘ë³µì ‘ì† ì•ˆë˜ë„ë¡ ì²˜ë¦¬
 
 
     }
     /// <summary>
-    /// Á¶ÀÎ·£´ı·ë -> ºñ¾îÀÖ´Â ¹æÀÌ ¾øÀ½
+    /// ì¡°ì¸ëœë¤ë£¸ -> ë¹„ì–´ìˆëŠ” ë°©ì´ ì—†ìŒ
     /// </summary>
     /// <param name="returnCode"></param>
     /// <param name="message"></param>
@@ -145,28 +145,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// ÀÛ¼ºÇÑ ÄÚµå³×ÀÓÀ¸·ÎÀÇ Á¢¼ÓÀ» ½ÃµµÇÏ´Â Ä¿½ºÅÒ¸Ş¼­µå
+    /// ì‘ì„±í•œ ì½”ë“œë„¤ì„ìœ¼ë¡œì˜ ì ‘ì†ì„ ì‹œë„í•˜ëŠ” ì»¤ìŠ¤í…€ë©”ì„œë“œ
     /// </summary>
     public void TryJoinGame()
     {
         string GameName = inputCode.text;
-        //Àß Á¢¼ÓµÇ¾îÀÖ´Â »óÅÂ¶ó¸é
+        //ì˜ ì ‘ì†ë˜ì–´ìˆëŠ” ìƒíƒœë¼ë©´
         if (PhotonNetwork.IsConnected)
         {
-            //Á¢¼ÓÁß
+            //ì ‘ì†ì¤‘
             PhotonNetwork.JoinRoom($"{GameName}");
         }
-        //¾Æ´Ï¶ó¸é
+        //ì•„ë‹ˆë¼ë©´
         else
         {
-            //ÀçÁ¢¼Ó ½Ãµµ
+            //ì¬ì ‘ì† ì‹œë„
             PhotonNetwork.ConnectUsingSettings();
         }
         JoinBtn.interactable = false;
     }
 
     /// <summary>
-    /// ¹æ ÁøÀÔ¿¡ ½ÇÆĞÇÏ¸é Äİ¹éµÇ´Â ¸Ş¼­µå
+    /// ë°© ì§„ì…ì— ì‹¤íŒ¨í•˜ë©´ ì½œë°±ë˜ëŠ” ë©”ì„œë“œ
     /// </summary>
     /// <param name="returnCode"></param>
     /// <param name="message"></param>
@@ -178,7 +178,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// ¹æ¿¡ ÁøÀÔ ½Ã (¹æ »ı¼º½Ã Æ÷ÇÔ) Äİ¹éµÇ´Â ¸Ş¼­µå
+    /// ë°©ì— ì§„ì… ì‹œ (ë°© ìƒì„±ì‹œ í¬í•¨) ì½œë°±ë˜ëŠ” ë©”ì„œë“œ
     /// </summary>
     public override void OnJoinedRoom()
     {
@@ -189,14 +189,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel(SceneName);
         }
 #if UNITY_EDITOR
-        //Å×½ºÆ® ÄÚµåÀÔ´Ï´Ù.
+        //í…ŒìŠ¤íŠ¸ ì½”ë“œì…ë‹ˆë‹¤.
         //PhotonNetwork.LoadLevel("Ingame");
 
 #endif
     }
 
     /// <summary>
-    /// ¹æÀåÀÔÀå¿¡¼­ÀÇ ´Ù¸¥ ÇÃ·¹ÀÌ¾î°¡ ÀÔÀåÇÏ¸é Äİ¹éµÇ´Â ¸Ş¼­µå
+    /// ë°©ì¥ì…ì¥ì—ì„œì˜ ë‹¤ë¥¸ í”Œë ˆì´ì–´ê°€ ì…ì¥í•˜ë©´ ì½œë°±ë˜ëŠ” ë©”ì„œë“œ
     /// </summary>
     /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)

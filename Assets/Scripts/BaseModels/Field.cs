@@ -1,12 +1,14 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 /// <summary>
 /// ?????????????? ???? ?????? ???? ?????? ?????????? ?????? ???? ??????
 /// </summary>
 public class Field : BaseModel
 {
+    [SerializeField]
     public GamePlayer owner;
     public Field(GamePlayer owner)
     {
@@ -14,20 +16,14 @@ public class Field : BaseModel
         zones = new List<Zone[]>();
         for (int i = 0; i < 10; i++)
         {
-            if (i == 0)
-            {
-                zones.Add(new Zone[2] { new Zone(i, ZoneType.Attack), null });
-            }
-            else
-            {
-                zones.Add(new Zone[2] { new Zone(i, ZoneType.Attack), new Zone(i, ZoneType.Defence) });
-            }
+            zones.Add(new Zone[2] { new Zone(i, ZoneType.Attack), new Zone(i, ZoneType.Defence) });
         }
     }
+    [SerializeField]
     public List<Zone[]> zones;
-    
 
 
+    [System.Serializable]
     public class Zone : BaseModel
     {
         public int roundAress;
@@ -42,14 +38,14 @@ public class Field : BaseModel
         public void LocatedCard(Card card)
         {
             if (currentCard != null)
-            { Debug.Log($"???? {currentCard}?? ????????. ???? ????"); }
+            { Debug.Log($"내고자 하는 카드인자가 null입니다. {currentCard}"); }
             else
             {
                 currentCard = card;
                 currentCard.unitWhere = UnitWhere.Field;
                 card.OnFieldDraw(this);
-                GameManager.instance.events.about_Field.OnLocatedCard_At_Zone?.Invoke(card, this);
-                Debug.Log($"{card}?? {this}?? ????????????.");
+                GameManager.instance.events.about_Prepare.OnDrawField?.Invoke(card, this);
+                Debug.Log($"{card}를 {this}에 배치하였습니다..");
             }
         }
 
@@ -59,7 +55,7 @@ public class Field : BaseModel
             if (currentCard != null)
             {
                 currentCard.OnThrowAway();
-                GameManager.instance.events.about_Field.OnRemoveCard_From_Zone?.Invoke(currentCard, this);
+                GameManager.instance.events.about_Prepare.OnThrowAwayFromField?.Invoke(currentCard);
                 currentCard.unitWhere = UnitWhere.Trash;
                 currentCard = null;
             }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
@@ -12,7 +12,7 @@ public partial class GamePlayer
 
     private int _default_DrawCard_Count;
     /// <summary>
-    /// ¹æ¾î ÅÏ ½Ã »Ì´Â Ä«µåÀÇ ¼ö
+    /// ë°©ì–´ í„´ ì‹œ ë½‘ëŠ” ì¹´ë“œì˜ ìˆ˜
     /// </summary>
     public int default_DrawCard_Count
     {
@@ -27,14 +27,14 @@ public partial class GamePlayer
         }
     }
     /// <summary>
-    /// ¹æ¾îÅÏ ½Ã »Ì´Â Ä«µåÀÇ ¼ö°¡ º¯È­ÇÒ °æ¿ì ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+    /// ë°©ì–´í„´ ì‹œ ë½‘ëŠ” ì¹´ë“œì˜ ìˆ˜ê°€ ë³€í™”í•  ê²½ìš° ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
     /// </summary>
     public OnValueChange<int> On_default_DrawCard_Count_Value_Change;
 
 
     private int _current_Health;
     /// <summary>
-    /// ÇöÀç Ã¼·Â
+    /// í˜„ì¬ ì²´ë ¥
     /// </summary>
     public int current_Health
     {
@@ -49,14 +49,14 @@ public partial class GamePlayer
         }
     }
     /// <summary>
-    /// ÇöÀçÃ¼·Â º¯È­½Ã ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+    /// í˜„ì¬ì²´ë ¥ ë³€í™”ì‹œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
     /// </summary>
     public OnValueChange<int> On_Current_Health_Value_Change;
 
 
     private int _max_Health = 30;
     /// <summary>
-    /// ±âº» Ã¼·Â
+    /// ê¸°ë³¸ ì²´ë ¥
     /// </summary>
     public int max_Health
     {
@@ -71,14 +71,14 @@ public partial class GamePlayer
         }
     }
     /// <summary>
-    /// ±âº»Ã¼·Â º¯È­½Ã ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+    /// ê¸°ë³¸ì²´ë ¥ ë³€í™”ì‹œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
     /// </summary>
     public OnValueChange<int> On_Max_Health_Value_Change;
 
 
     private int _current_Shield;
     /// <summary>
-    /// ÇöÀç ¹æ¾î¸·
+    /// í˜„ì¬ ë°©ì–´ë§‰
     /// </summary>
     public int current_Shield
     {
@@ -93,14 +93,14 @@ public partial class GamePlayer
         }
     }
     /// <summary>
-    /// ÇöÀç ¹æ¾î¸· º¯È­½Ã ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+    /// í˜„ì¬ ë°©ì–´ë§‰ ë³€í™”ì‹œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
     /// </summary>
     public OnValueChange<int> On_Current_Shield_Value_Change;
 
-    /****ÁÖ¼®Ã³¸® : ÃÖ´ë¹æ¾î¸·****
+    /****ì£¼ì„ì²˜ë¦¬ : ìµœëŒ€ë°©ì–´ë§‰****
     private int _max_Shield;
     /// <summary>
-    /// ÃÖ´ë ¹æ¾î¸·
+    /// ìµœëŒ€ ë°©ì–´ë§‰
     /// </summary>
     public int max_Shield
     {
@@ -115,15 +115,15 @@ public partial class GamePlayer
         }
     }
     /// <summary>
-    /// ÃÖ´ë ¹æ¾î¸· º¯È­½Ã ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+    /// ìµœëŒ€ ë°©ì–´ë§‰ ë³€í™”ì‹œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
     /// </summary>
     public event OnValueChange<int> On_Max_Shield_Value_Change;
     */
 
-    [SerializeField, LabelText("ÅÏ Å¸ÀÔ")]
+    [SerializeField, LabelText("í„´ íƒ€ì…")]
     private TurnType _current_TurnType;
     /// <summary>
-    /// ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ÅÏÅ¸ÀÔ
+    /// í˜„ì¬ í”Œë ˆì´ì–´ì˜ í„´íƒ€ì…
     /// </summary>
     public TurnType current_TurnType
     {
@@ -139,13 +139,13 @@ public partial class GamePlayer
         }
     }
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾îÀÇ ÅÏÅ¸ÀÔÀÌ ¹Ù²î¸é ¹ßµ¿ÇÏ´Â ÀÌº¥Æ® ¸Ş¼­µå
+    /// í”Œë ˆì´ì–´ì˜ í„´íƒ€ì…ì´ ë°”ë€Œë©´ ë°œë™í•˜ëŠ” ì´ë²¤íŠ¸ ë©”ì„œë“œ
     /// </summary>
     public OnValueChange<TurnType> On_TurnType_Change;
 
     private CardType _lastOpenCardType;
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î°¡ °¡Àå ÃÖ±Ù¿¡ ³½ Ä«µåÀÇ Å¸ÀÔ
+    /// í”Œë ˆì´ì–´ê°€ ê°€ì¥ ìµœê·¼ì— ë‚¸ ì¹´ë“œì˜ íƒ€ì…
     /// </summary>
     public CardType lastOpenCardType
     {
@@ -161,7 +161,7 @@ public partial class GamePlayer
         }
     }
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾îÀÇ ÅÏÅ¸ÀÔÀÌ ¹Ù²î¸é ¹ßµ¿ÇÏ´Â ÀÌº¥Æ® ¸Ş¼­µå
+    /// í”Œë ˆì´ì–´ì˜ í„´íƒ€ì…ì´ ë°”ë€Œë©´ ë°œë™í•˜ëŠ” ì´ë²¤íŠ¸ ë©”ì„œë“œ
     /// </summary>
     public OnValueChange<CardType> On_OpenCard_LastOpenCardValueChange;
 
@@ -171,13 +171,13 @@ public partial class GamePlayer
     #region Constructor
     public GamePlayer()
     {
-        //ÇÃ·¹ÀÌ¾î ÇÊµåº¯¼ö ÃÊ±âÈ­
+        //í”Œë ˆì´ì–´ í•„ë“œë³€ìˆ˜ ì´ˆê¸°í™”
         default_DrawCard_Count = 5;
         current_Health = max_Health;
         current_Shield = 0;
 
-        //ÇÃ·¹ÀÌ¾î Á¤º¸ ÃÊ±âÈ­
-        //ÃßÈÄ ·Îºñ¿¡¼­ PlayerData¸¦ ¹Ş¾Æ¿Í ·ÎµåÇÏµµ·Ï
+        //í”Œë ˆì´ì–´ ì •ë³´ ì´ˆê¸°í™”
+        //ì¶”í›„ ë¡œë¹„ì—ì„œ PlayerDataë¥¼ ë°›ì•„ì™€ ë¡œë“œí•˜ë„ë¡
         deckData = new Deck(this);
         hand = new Hand(this);
         trash = new TrashCan(this);
@@ -187,20 +187,20 @@ public partial class GamePlayer
         BuffList = new Dictionary<Buff, List<Buff>>();
         DebuffList = new Dictionary<Debuff, List<Debuff>>();
 
-        //ÃÊ±âÈ­ µÇ¸ç ÇÊ¿äµ¥ÀÌÅÍ°¡ ÀÚµ¿ÃÊ±âÈ­
+        //ì´ˆê¸°í™” ë˜ë©° í•„ìš”ë°ì´í„°ê°€ ìë™ì´ˆê¸°í™”
 
-        Debug.Log($"ÇÃ·¹ÀÌ¾î Á¤º¸ »ı¼º");
+        Debug.Log($"í”Œë ˆì´ì–´ ì •ë³´ ìƒì„±");
 
         
     }
     public void Init()
     {
-        //ÇÁ¸®Æä¾î ÀÌº¥Æ® Ãß°¡
+        //í”„ë¦¬í˜ì–´ ì´ë²¤íŠ¸ ì¶”ê°€
         GameManager.instance.events.about_GameManager.AddEventOnState(GameState.Prepare,
             //start
             () =>
             {
-                //ÁØºñ´Ü°è ÁøÀÔ ½Ã Ä«µå¸¦ µ¦À¸·ÎºÎÅÍ Áı½À´Ï´Ù.
+                //ì¤€ë¹„ë‹¨ê³„ ì§„ì… ì‹œ ì¹´ë“œë¥¼ ë±ìœ¼ë¡œë¶€í„° ì§‘ìŠµë‹ˆë‹¤.
                 for (int i = 0; i < default_DrawCard_Count; i++)
                 {
                     deckData.DrawRandomCard_ToHand();
@@ -219,25 +219,25 @@ public partial class GamePlayer
 
     #region Private/Protected Methods
     /// <summary>
-    /// Ã¹ÅÏ¿¡, ÇÃ·¹ÀÌ¾î°¡ Ä«µå¸¦ ³»Áö ¾Ê´Â °æ¿ì¿¡ ´ëÇØ¼­ ¿¹¿ÜÃ³¸®¸¦ ÇÕ´Ï´Ù.
-    /// ¹«Á¶°Ç ¹«ÀÛÀ§ Ä«µå°¡ ¹èÄ¡µÇµµ·Ï ¼³Á¤ÇÕ´Ï´Ù.
+    /// ì²«í„´ì—, í”Œë ˆì´ì–´ê°€ ì¹´ë“œë¥¼ ë‚´ì§€ ì•ŠëŠ” ê²½ìš°ì— ëŒ€í•´ì„œ ì˜ˆì™¸ì²˜ë¦¬ë¥¼ í•©ë‹ˆë‹¤.
+    /// ë¬´ì¡°ê±´ ë¬´ì‘ìœ„ ì¹´ë“œê°€ ë°°ì¹˜ë˜ë„ë¡ ì„¤ì •í•©ë‹ˆë‹¤.
     /// </summary>
     private void OnFirstTurn_PrepareMethod()
     {
-        //Ã¹ÅÏÀÇ ¹èÆ²¸ğµå ¿£µå ½Ã
-        //ÇÊµå 0¹øÂ°°¡ ºñ¾îÀÖ´Ù¸é ¹«ÀÛÀ§Ä«µå¸¦ ÇÊµå¿¡ ³À´Ï´Ù.
+        //ì²«í„´ì˜ ë°°í‹€ëª¨ë“œ ì—”ë“œ ì‹œ
+        //í•„ë“œ 0ë²ˆì§¸ê°€ ë¹„ì–´ìˆë‹¤ë©´ ë¬´ì‘ìœ„ì¹´ë“œë¥¼ í•„ë“œì— ëƒ…ë‹ˆë‹¤.
         if (GameManager.instance.current_Turn == 0)
         {
-            //Ã¹ÅÏÀÇ Ã¹¹øÂ° ¶ó¿îµåÀÇ ÇÊµå°¡ ºñ¾îÀÖÀ¸¸é
+            //ì²«í„´ì˜ ì²«ë²ˆì§¸ ë¼ìš´ë“œì˜ í•„ë“œê°€ ë¹„ì–´ìˆìœ¼ë©´
             int adress = this.current_TurnType == TurnType.Attack_Turn ? 0 : 1;
             if(this.field.zones[0][adress].currentCard == null)
             {
-                //ÇÚµå¿¡¼­ ¹«ÀÛÀ§ Ä«µå¸¦ ÇØ´çÇÊµå¿¡ ³À´Ï´Ù.
+                //í•¸ë“œì—ì„œ ë¬´ì‘ìœ„ ì¹´ë“œë¥¼ í•´ë‹¹í•„ë“œì— ëƒ…ë‹ˆë‹¤.
                 int random = Random.Range(0, this.hand.cards.Count);
                 this.field.zones[0][adress].LocatedCard(this.hand.cards[random]);
             }
         }
-        //¸Ş¼­µå µî·ÏÀ» »èÁ¦ÇÕ´Ï´Ù.
+        //ë©”ì„œë“œ ë“±ë¡ì„ ì‚­ì œí•©ë‹ˆë‹¤.
         GameManager.instance.events.about_GameManager.DeleteEventOnState(GameState.Prepare, null, null, OnFirstTurn_PrepareMethod);
     }
     #endregion

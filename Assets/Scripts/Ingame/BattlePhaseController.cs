@@ -1,9 +1,9 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ?????????????? ???????? ?? ?????????? ???????? ????????
+/// ì›ê²©ìœ¼ë¡œë¶€í„° ê° í”Œë ˆì´ì–´ë“¤ì˜ ì •ë³´ë¥¼ ë°›ì•„ì™€ ë¡œì»¬ì—ì„œ ë°°í‹€ê²°ê³¼ë¥¼ ì²˜ë¦¬í•©ë‹ˆë‹¤.
 /// </summary>
 public class BattlePhaseController : MonoBehaviour
 {
@@ -14,10 +14,9 @@ public class BattlePhaseController : MonoBehaviour
         End
     }
     public int currentRound = 0;
-    public BattleConnecter connecter;
     public BattlePhaseState _cur_State;
-    public BattlePhaseEventTrigger events;
     public BattlePhaseState cur_State => _cur_State;
+    public BattlePhaseEventTrigger events;
     public Dictionary<BattlePhaseState, BattlePhaseEventTrigger> StateEvents;
     public class BattlePhaseEventTrigger
     {
@@ -89,9 +88,10 @@ public class BattlePhaseController : MonoBehaviour
         }
     }
 
+    public BattleConnecter connecter;
     public GamePlayer myPlayer;
     public GamePlayer otherPlayer;
-
+    public EventTrigger.BattleEventHandler battleEventHanlder;
 
     public void Awake()
     {
@@ -102,7 +102,7 @@ public class BattlePhaseController : MonoBehaviour
     }
 
     /// <summary>
-    /// °ÔÀÓ¸Å´ÏÀú¿¡ ÀÌº¥Æ® µî·Ï
+    /// ê²Œì„ë§¤ë‹ˆì €ì— ì´ë²¤íŠ¸ ë“±ë¡
     /// </summary>
     public void Init()
     {
@@ -154,7 +154,7 @@ public class BattlePhaseController : MonoBehaviour
             () =>
             {
                 GameManager.instance.events.about_Battle.OnEnter_BattlePhase?.Invoke();
-                //¹èÆ² ½ÃÀÛ
+                //ë°°í‹€ ì‹œì‘
                 StartBattleMethod_Callback();
 
             }, //start
@@ -196,7 +196,7 @@ public class BattlePhaseController : MonoBehaviour
         var defencePlayer = connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn);
         int max_round = 10;
 
-        //¶ó¿îµå°¡ 10¶ó¿îµå ÀÌÇÏÀÏ ¶§, È¤Àº µÑ´Ù Ä«µå°¡ ºñ¾îÀÖÀ» ¶§±îÁöÀÇ ¹èÆ² ½Ã¹Ä·¹ÀÌ¼Ç
+        //ë¼ìš´ë“œê°€ 10ë¼ìš´ë“œ ì´í•˜ì¼ ë•Œ, í˜¹ì€ ë‘˜ë‹¤ ì¹´ë“œê°€ ë¹„ì–´ìˆì„ ë•Œê¹Œì§€ì˜ ë°°í‹€ ì‹œë®¬ë ˆì´ì…˜
         while (currentRound < max_round || (attackPlayer.field.zones[currentRound][0].currentCard == null && defencePlayer.field.zones[currentRound][1].currentCard == null))
         {
             attackPlayer = connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn);
@@ -204,12 +204,12 @@ public class BattlePhaseController : MonoBehaviour
             TryBattle(attackPlayer.field.zones[currentRound][0].currentCard, defencePlayer.field.zones[currentRound][1].currentCard, out var result);
             currentRound++;
         }
-        //½Ã¹Ä·¹ÀÌ¼Ç µ¹¸®±â¸¦ ¸¶Ä¡¸é ¹èÆ²ÆäÀÌÁî¸¦ Á¾·áÇÕ´Ï´Ù.
+        //ì‹œë®¬ë ˆì´ì…˜ ëŒë¦¬ê¸°ë¥¼ ë§ˆì¹˜ë©´ ë°°í‹€í˜ì´ì¦ˆë¥¼ ì¢…ë£Œí•©ë‹ˆë‹¤.
         SetBattlePhase(BattlePhaseState.End);
     }
 
     /// <summary>
-    /// ÇöÀç ¹èÆ²Àº µÎ ÇÃ·¹ÀÌ¾î Áß ÇÑÂÊÀÌ¶óµµ Ä«µå¸¦ ³½ °æ¿ì¿¡¸¸ ¹èÆ²À» ½ÃµµÇÕ´Ï´Ù.
+    /// í˜„ì¬ ë°°í‹€ì€ ë‘ í”Œë ˆì´ì–´ ì¤‘ í•œìª½ì´ë¼ë„ ì¹´ë“œë¥¼ ë‚¸ ê²½ìš°ì—ë§Œ ë°°í‹€ì„ ì‹œë„í•©ë‹ˆë‹¤.
     /// </summary>
     /// <param name="Attacker"></param>
     /// <param name="Defender"></param>
@@ -218,7 +218,7 @@ public class BattlePhaseController : MonoBehaviour
     {
         var AttackPlayer = connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn);
         var DefencePlayer = connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn);
-        //°¢°¢ÀÇ ÇÃ·¹ÀÌ¾î·ÎºÎÅÍ ÃÖ±Ù¿¡ ³½ Ä«µåÀÇ Ä«µåÅ¸ÀÔÀ» ¹Ş¾Æ¿É´Ï´Ù.
+        //ê°ê°ì˜ í”Œë ˆì´ì–´ë¡œë¶€í„° ìµœê·¼ì— ë‚¸ ì¹´ë“œì˜ ì¹´ë“œíƒ€ì…ì„ ë°›ì•„ì˜µë‹ˆë‹¤.
         CardType attackerType = connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn).lastOpenCardType;
         CardType defenderType = connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn).lastOpenCardType;
         if (Attacker == null)
@@ -232,7 +232,7 @@ public class BattlePhaseController : MonoBehaviour
             attackerType = Attacker.type;
             GameManager.instance.events.about_Battle.OnDefenceCard_Null?.Invoke();
         }
-        //µÑ´Ù Ä«µå°¡ ÀÖÀ½
+        //ë‘˜ë‹¤ ì¹´ë“œê°€ ìˆìŒ
         else
         {
             attackerType = Attacker.type;
@@ -250,7 +250,7 @@ public class BattlePhaseController : MonoBehaviour
             GameManager.instance.events.about_Battle.OnFailAttack(Attacker, Defender);
             Attacker.AttackFail(DefencePlayer, AttackPlayer);
             Attacker.DefenceEffect(AttackPlayer, DefencePlayer);
-            //ÅÏÅ¸ÀÔÀ» ¹Ù²ãÁİ´Ï´Ù.
+            //í„´íƒ€ì…ì„ ë°”ê¿”ì¤ë‹ˆë‹¤.
             connecter.GetPlayer_CompareTurnType(TurnType.Attack_Turn).current_TurnType = TurnType.Defence_Turn;
             connecter.GetPlayer_CompareTurnType(TurnType.Defence_Turn).current_TurnType = TurnType.Attack_Turn;
         }
@@ -262,7 +262,7 @@ public class BattlePhaseController : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹«½ÂºÎµµ °ø°İ ¼º°øÀÔ´Ï´Ù.
+    /// ë¬´ìŠ¹ë¶€ë„ ê³µê²© ì„±ê³µì…ë‹ˆë‹¤.
     /// </summary>
     /// <param name="attacker"></param>
     /// <param name="defender"></param>
@@ -283,7 +283,7 @@ public class BattlePhaseController : MonoBehaviour
                         return CardBattleResult.Success;
                     else return CardBattleResult.Fail;
                 }
-            default:       //º¸
+            default:       //ë³´
                 {
                     if (defender == CardType.Rock || defender == CardType.Paper)
                         return CardBattleResult.Success;

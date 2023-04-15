@@ -94,7 +94,6 @@ public class Card : BaseModel
     /// </summary>
     public virtual void OnFieldDraw(Field.Zone adress)
     {
-        GameManager.instance.events.about_Field.OnLocatedCard_At_Zone?.Invoke(this, adress);
         Debug.Log($"{this.name}을 필드에 냈습니다.");
     }
 
