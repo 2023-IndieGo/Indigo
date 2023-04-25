@@ -153,6 +153,11 @@ public class EventTrigger
         public Del_NoRet_2_Params<Card, Field.Zone> OnDrawField;
 
         /// <summary>
+        /// 핸드에서 필드로 카드를 내는 것을 실패할 때의 이벤트
+        /// </summary>
+        public Del_NoRet_1_Params<Card> FailDrawOnField;
+
+        /// <summary>
         /// 핸드에서 쓰레기통으로 카드를 버릴 때의 이벤트
         /// </summary>
         public Del_NoRet_1_Params<Card> OnThrowAwayFromHand;

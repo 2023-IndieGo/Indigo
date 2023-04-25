@@ -28,7 +28,10 @@ public partial class Character : BaseModel
     public Character(GamePlayer player)
     {
         this.myGamePlayer = player;
+        if(passive == null)
         passive = new Passive();
+
+        if(ultimateSkill == null)
         ultimateSkill = new UltimateSkill();
     }
     #endregion

@@ -96,6 +96,17 @@ public partial class GamePlayer
         }
 
         /// <summary>
+        /// 핸드에 카드를 생성합니다.
+        /// </summary>
+        /// <param name="card"></param>
+        public void CreateCard(Card card)
+        {
+            cards.Add(card);
+            card.unitWhere = UnitWhere.Hand;
+            GameManager.instance.events.about_Prepare.OnCreateCard_OnHand?.Invoke(card);
+        }
+
+        /// <summary>
         /// 매개변수값의 핸드에 있는 카드를 없앱니다. (버리는 것이 아닙니다.)
         /// </summary>
         /// <param name="card"></param>
@@ -182,4 +193,5 @@ public partial class GamePlayer
 
     [SerializeField] public Field field;
     [SerializeField] public Character character;
+    [SerializeField] public EventTrigger eventTrigger;
 }

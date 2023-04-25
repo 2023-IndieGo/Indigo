@@ -148,7 +148,7 @@ public class GameManager : SingletonMono<GameManager>
         events.about_GameManager.Update();
     }
     #endregion
-
+    
 
     #region Private/Protected Methods
     protected override void Awake()
@@ -171,21 +171,17 @@ public class GameManager : SingletonMono<GameManager>
 
     private void GetPlayerData()
     {
+        //////자기 플레이어에 대한 초기화/////
         //GamePlayer를 새로 생성하여 
         //자신 플레이어 데이터를 기반으로 GamePlayer 초기화 및
         //players[0]에 할당
-        GamePlayer pl = new GamePlayer();
+        GamePlayer pl = new GamePlayer();   //나중엔 플레이어데이터를 통해 신규생성
         pl.Init();
+        pl.eventTrigger = this.events;
         battleConnecter.Init(pl);
-        //로컬 플레이어의 데이터를 게임매니저의 플레이어 0번에 등록
         players[0] = pl;
-        int insertAdress = isConnectedClientMaster ? 0 : 1;
-        GamePlayer secPl = battleConnecter.players[insertAdress];
-
-
-        players[0].current_TurnType = TurnType.Attack_Turn;
-
-        
+              
+                
         //상대 플레이어 데이터를 가져오기를 시도.
         //내부 비동기 코루틴으로 상대 플레이어 정보를 지속적으로 가져오기를 시도,
         StartCoroutine(TryGetOtherPlayerInfo());
@@ -193,20 +189,23 @@ public class GameManager : SingletonMono<GameManager>
         {
             float maxWaitTime = 5;
             float currentTime = 0;
+            GamePlayer secondPlayer = null;
             //일정 시간이 지날때까지, 혹은 플레이어 정보가 null이 아닐때까지
-            while (currentTime >= maxWaitTime || secPl == null)
+            while (currentTime >= maxWaitTime || secondPlayer == null)
             {
+                ///배틀커넥터로부터 지속적으로 데이터얻어오기를 시도
+                battleConnecter.ConnectedAndTrySync();
                 //상대플레이어 데이터 받아오기 시도 => 포톤넷워크
-                secPl = battleConnecter.players[insertAdress];
+                secondPlayer = battleConnecter.GetOtherPlayer();
                 currentTime += Time.deltaTime;
                 yield return null;
             }
             //성공 시 
             //players[1]에 할당
-            if (secPl != null)
+            if (secondPlayer != null)
             {
-                players[insertAdress] = secPl;
-                secPl.current_TurnType = TurnType.Defence_Turn;
+                players[1] = secondPlayer;
+                players[0].current_TurnType = isConnectedClientMaster ? TurnType.Attack_Turn : TurnType.Defence_Turn;
 
                 //서버에 대한 호스트/클라 여부를 게임매니저 변수
                 server_Authority = isConnectedClientMaster ? Server_authority_Type.Host : Server_authority_Type.Client;

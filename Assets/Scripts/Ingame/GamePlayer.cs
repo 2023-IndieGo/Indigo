@@ -226,6 +226,7 @@ public partial class GamePlayer
     {
         //첫턴의 배틀모드 엔드 시
         //필드 0번째가 비어있다면 무작위카드를 필드에 냅니다.
+        //핸드에서 낼 수 있는 카드를 먼저 골라서 받아와야 합니다. (링큐 사용ㄴㄴ)
         if (GameManager.instance.current_Turn == 0)
         {
             //첫턴의 첫번째 라운드의 필드가 비어있으면
