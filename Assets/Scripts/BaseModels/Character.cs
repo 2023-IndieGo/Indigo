@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +10,9 @@ public partial class Character : BaseModel
 
     public string name;
 
+    /*/
     public List<Card> specialCards;
-
+    /*/
     #endregion
 
 
@@ -27,7 +28,10 @@ public partial class Character : BaseModel
     public Character(GamePlayer player)
     {
         this.myGamePlayer = player;
+        if(passive == null)
         passive = new Passive();
+
+        if(ultimateSkill == null)
         ultimateSkill = new UltimateSkill();
     }
     #endregion

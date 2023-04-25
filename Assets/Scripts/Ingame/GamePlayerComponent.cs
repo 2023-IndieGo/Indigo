@@ -5,7 +5,9 @@ using Sirenix.OdinInspector;
 
 public partial class GamePlayer
 {
+    [SerializeField]
     public Deck deckData;
+    [System.Serializable]
     /// <summary>
     /// 게임플레이어가 드로우할 카드뭉치
     /// </summary>
@@ -30,10 +32,12 @@ public partial class GamePlayer
         {
             if(cards.Contains(card))
             {
+                //카드뭉치 리스트에서 카드 제거
                 cards.Remove(card);
-                GameManager.instance.events.about_Deck.OnDrawCard_From_Deck?.Invoke(card);
-                card.OnDrawing();
+                //핸드에 애딩
                 owner.hand.GetCard(card);
+                //구독자에게 알리기
+                GameManager.instance.events.about_Prepare.OnDrawCard_From_Deck?.Invoke(card);
             }
             else
             {
@@ -51,15 +55,21 @@ public partial class GamePlayer
             DrawCard_ToHand(drawedCard);
         }
 
+
+        /// <summary>
+        /// 덱이 카드를 얻습니다. 이벤트를 따로 실행하지 않습니다.
+        /// </summary>
+        /// <param name="card"></param>
         public void GetCard(Card card)
         {
             cards.Add(card);
             card.unitWhere = UnitWhere.Deck;
-            //UI변화같은거 이벤트로 추가해야 할 수 있음
         }
     }
 
+    [SerializeField]
     public Hand hand;
+    [System.Serializable]
     /// <summary>
     /// 게임플레이어가 현재 들고 있는 카드뭉치
     /// </summary>
@@ -81,12 +91,23 @@ public partial class GamePlayer
         public void GetCard(Card card)
         {
             cards.Add(card);
-            GameManager.instance.events.about_Hand.OnGetCard_To_Hand?.Invoke(card);
             card.unitWhere = UnitWhere.Hand;
+
         }
 
         /// <summary>
-        /// 핸드에 있는 카드가 사라집니다. (버리는 것이 아닙니다.)
+        /// 핸드에 카드를 생성합니다.
+        /// </summary>
+        /// <param name="card"></param>
+        public void CreateCard(Card card)
+        {
+            cards.Add(card);
+            card.unitWhere = UnitWhere.Hand;
+            GameManager.instance.events.about_Prepare.OnCreateCard_OnHand?.Invoke(card);
+        }
+
+        /// <summary>
+        /// 매개변수값의 핸드에 있는 카드를 없앱니다. (버리는 것이 아닙니다.)
         /// </summary>
         /// <param name="card"></param>
         public void BlowCard(Card card)
@@ -94,7 +115,7 @@ public partial class GamePlayer
            if(cards.Contains(card))
             {
                 cards.Remove(card);
-                GameManager.instance.events.about_Hand.OnBlowCard_From_Hand?.Invoke(card);
+                GameManager.instance.events.about_Prepare.OnCardOutofTheGame?.Invoke(card);
             }
            else
             {
@@ -112,18 +133,20 @@ public partial class GamePlayer
             if(cards.Contains(card))
             {
                 cards.Remove(card);
-                GameManager.instance.events.about_Hand.OnThrowCard_From_Hand?.Invoke(card);
+                owner.trash.GetCard(card);
+                GameManager.instance.events.about_Prepare.OnThrowAwayFromHand?.Invoke(card);
                 
-                owner.trash.GetCard_FromHand(card);
             }
         }
     }
 
+    [SerializeField]
     public TrashCan trash;
+    [System.Serializable]
     /// <summary>
     /// 게임플레이어가 사용을 마치거나 들고 있는 상태에서 버려진 카드뭉치
     /// </summary>
-    public class TrashCan //베이스모델을 상속할 것인지는 차후 기획 보고
+    public class TrashCan
     {
         public TrashCan(GamePlayer owner)
         {
@@ -138,12 +161,11 @@ public partial class GamePlayer
         /// 매개변수의 카드를 쓰레기통으로 가져옵니다.
         /// </summary>
         /// <param name="card"></param>
-        public void GetCard_FromHand(Card card)
+        public void GetCard(Card card)
         {
             cards.Add(card);
             card.OnThrowAway();
             card.unitWhere = UnitWhere.Trash;
-            GameManager.instance.events.about_Trash.OnGetCard?.Invoke(card);
         }
 
         /// <summary>
@@ -155,12 +177,21 @@ public partial class GamePlayer
             {
                 owner.deckData.cards.Add(cards[i]);
                 cards[i].unitWhere = UnitWhere.Deck;
+                GameManager.instance.events.about_Prepare.OnGetCardToDeck_FromTrash?.Invoke(cards[i]);
             }
-            GameManager.instance.events.about_Trash.OnClear_TrashCan?.Invoke();
+            cards.Clear();
         }
     }
 
 
-    public Field field;
-    public Character character;
+    //버프/디버프 아우라 관리용 필드 레퍼런스 필요
+    //중요한 점 : 버프와 디버프는 각각 따로 별도로, 중첩될수도, 중첩안될수도
+    //각각의 버프,디버프는 별도의 클래스로 관리되어야 함
+    //그리고 그에 걸맞는 이벤트가 또 따로 필요함
+    [SerializeField] public Dictionary<Buff, List<Buff>> BuffList;
+    [SerializeField] public Dictionary<Debuff, List<Debuff>> DebuffList;
+
+    [SerializeField] public Field field;
+    [SerializeField] public Character character;
+    [SerializeField] public EventTrigger eventTrigger;
 }

@@ -1,10 +1,12 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 
-//º¹ºÙÇØ¼­ ¾²¸é
+//ë³µë¶™í•´ì„œ ì“°ë©´
 #region Field
 #endregion
 
@@ -27,12 +29,12 @@ using System;
 
 #region Private/Protected Methods
 #endregion
-//½ºÅ©¸³Æ®°¡ ±ò²ûÇØÁ®¿ä *^^*
+//ìŠ¤í¬ë¦½íŠ¸ê°€ ê¹”ë”í•´ì ¸ìš” *^^*
 
 
 
 /// <summary>
-/// °ªÀÌ º¯È­ÇÒ °æ¿ì ½ÇÇàµÇ´Â µ¨¸®°ÔÀÌÆ® ¸Ş¼­µå
+/// ê°’ì´ ë³€í™”í•  ê²½ìš° ì‹¤í–‰ë˜ëŠ” ë¸ë¦¬ê²Œì´íŠ¸ ë©”ì„œë“œ
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <param name="before"></param>
@@ -47,6 +49,26 @@ public enum Server_authority_Type
 {
     Host,
     Client
+}
+
+public enum AnimationType
+{
+    /// <summary>
+    /// ì• ë‹ˆë©”ì´ì…˜
+    /// </summary>
+    Animation,
+    /// <summary>
+    /// ì´í™íŠ¸
+    /// </summary>
+    Particle,
+    /// <summary>
+    /// ì• ë‹ˆë©”ì´ì…˜, ì´í™íŠ¸ ë‘˜ë‹¤
+    /// </summary>
+    Both,
+    /// <summary>
+    /// ì¬ìƒX (ëŒ€ê¸°)
+    /// </summary>
+    None
 }
 
 public enum TurnType 
@@ -91,4 +113,26 @@ public enum ZoneType
 }
 public class Define : MonoBehaviour
 {
+}
+
+public class CustomBinaryFormatter
+{
+    public static byte[] Serialized<T>(T type)
+    {
+        var bf = new BinaryFormatter();
+        MemoryStream ms = new MemoryStream();
+        bf.Serialize(ms, type);
+        byte[] bytes = ms.ToArray();
+        ms.Close();
+        return bytes;
+    }
+
+    public static T DeserializedFromByte<T>(byte[] bytes)
+    {
+        var bf = new BinaryFormatter();
+        MemoryStream ms = new MemoryStream(bytes);
+        T data = (T)bf.Deserialize(ms);
+        ms.Close();
+        return data;
+    }
 }
